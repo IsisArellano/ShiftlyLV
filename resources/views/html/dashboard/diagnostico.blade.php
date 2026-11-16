@@ -356,6 +356,9 @@
     </script>
 
     <!-- Script Principal del Diagnóstico -->
+    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
+    <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
     <script src="{{ asset('js/diagnostico.js') }}?v=2"></script>
 </body>
 

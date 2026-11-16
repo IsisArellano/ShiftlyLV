@@ -120,3 +120,35 @@ Route::get('/resultado', function () {
 Route::get('/resultados-leccion', function () {
     return view('html.dashboard.resultados-leccion');
 })->name('resultados-leccion');
+
+
+/*
+|--------------------------------------------------------------------------
+| 4. Árboles de Lecciones por Carrera (html/dashboard/ruta-*)
+|--------------------------------------------------------------------------
+| El progreso se guarda en localStorage (shiftly_progreso_<carrera>).
+*/
+
+Route::get('/ruta-sistemas', function () {
+    return view('html.dashboard.ruta-sistemas');
+})->name('ruta-sistemas');
+
+Route::get('/ruta-medicina', function () {
+    return view('html.dashboard.ruta-medicina');
+})->name('ruta-medicina');
+
+Route::get('/ruta-gastronomia', function () {
+    return view('html.dashboard.ruta-gastronomia');
+})->name('ruta-gastronomia');
+
+Route::get('/ruta-derecho', function () {
+    return view('html.dashboard.ruta-derecho');
+})->name('ruta-derecho');
+
+Route::get('/ruta-arquitectura', function () {
+    return view('html.dashboard.ruta-arquitectura');
+})->name('ruta-arquitectura');
+
+Route::get('/ruta-general', function () {
+    return view('html.dashboard.ruta-general');
+})->name('ruta-general');

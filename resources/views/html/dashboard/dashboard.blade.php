@@ -145,6 +145,56 @@
                 </div>
             </div>
 
+            <!-- SECCIÓN: RUTAS POR CARRERA -->
+            <div class="col-12">
+                <div class="card card-custom p-4">
+                    <h5 class="card-title-custom d-flex align-items-center gap-2 fs-5">
+                        <i class="bi bi-signpost-split-fill" style="color: var(--orange-bright);"></i>
+                        Mi Árbol de Lecciones por Carrera
+                    </h5>
+                    <p class="text-muted small mb-3">Elige tu área profesional para continuar con tu ruta gamificada.</p>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-sistemas') }}" class="btn-nav-item">
+                                <span><i class="bi bi-cpu me-2"></i>Sistemas y TI</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-medicina') }}" class="btn-nav-item">
+                                <span><i class="bi bi-heart-pulse me-2"></i>Medicina</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-gastronomia') }}" class="btn-nav-item">
+                                <span><i class="bi bi-cup-hot me-2"></i>Gastronomía</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-derecho') }}" class="btn-nav-item">
+                                <span><i class="bi bi-bank me-2"></i>Derecho</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-arquitectura') }}" class="btn-nav-item">
+                                <span><i class="bi bi-building me-2"></i>Arquitectura</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <a href="{{ url('/ruta-general') }}" class="btn-nav-item">
+                                <span><i class="bi bi-globe-americas me-2"></i>General</span>
+                                <i class="bi bi-chevron-right small"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 

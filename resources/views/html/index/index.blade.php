@@ -214,7 +214,7 @@
                 
                 <!-- 1. Sistemas y Software -->
                 <div class="col">
-                    <a href="{{ url('/servicios') }}" class="career-card-img">
+                    <a href="{{ url('/ruta-sistemas') }}" class="career-card-img">
                         <div class="career-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Sistemas y Software">
                             <span class="career-img-badge"><i class="bi bi-laptop me-1 text-warning"></i> TI</span>
@@ -228,7 +228,7 @@
 
                 <!-- 2. Medicina y Salud -->
                 <div class="col">
-                    <a href="{{ url('/servicios') }}" class="career-card-img">
+                    <a href="{{ url('/ruta-medicina') }}" class="career-card-img">
                         <div class="career-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Medicina y Salud">
                             <span class="career-img-badge"><i class="bi bi-heart-pulse-fill me-1 text-danger"></i> Salud</span>
@@ -242,7 +242,7 @@
 
                 <!-- 3. Gastronomía -->
                 <div class="col">
-                    <a href="{{ url('/servicios') }}" class="career-card-img">
+                    <a href="{{ url('/ruta-gastronomia') }}" class="career-card-img">
                         <div class="career-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80" alt="Gastronomía">
                             <span class="career-img-badge"><i class="bi bi-cup-hot-fill me-1 text-warning"></i> Chef</span>
@@ -256,7 +256,7 @@
 
                 <!-- 4. Derecho Corporativo -->
                 <div class="col">
-                    <a href="{{ url('/servicios') }}" class="career-card-img">
+                    <a href="{{ url('/ruta-derecho') }}" class="career-card-img">
                         <div class="career-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80" alt="Derecho Corporativo">
                             <span class="career-img-badge"><i class="bi bi-bank2 me-1 text-info"></i> Legal</span>
@@ -270,7 +270,7 @@
 
                 <!-- 5. Arquitectura -->
                 <div class="col">
-                    <a href="{{ url('/servicios') }}" class="career-card-img">
+                    <a href="{{ url('/ruta-arquitectura') }}" class="career-card-img">
                         <div class="career-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" alt="Arquitectura">
                             <span class="career-img-badge"><i class="bi bi-building me-1 text-primary"></i> Diseño</span>

@@ -144,6 +144,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script de diagnóstico JS -->
+    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
+    <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
     <script src="{{ asset('js/diagnostico.js') }}"></script>
 
 </body>

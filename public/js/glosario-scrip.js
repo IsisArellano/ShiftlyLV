@@ -21,13 +21,10 @@ function toggleTranslation(button) {
 }
 
 // 3. Pronunciación de voz interactiva (Text-to-Speech)
+// Usa la voz femenina global (voz-femenina.js): OpenAI "nova" o la mejor voz del navegador
 function speakText(text, lang = 'en-US') {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Detener pronunciaciones previas
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
-        utterance.rate = 0.9; // Velocidad ligeramente pausada para aprendizaje
-        window.speechSynthesis.speak(utterance);
+    if (window.reproducirAudioIngles && window.VozFemenina.soportado()) {
+        window.reproducirAudioIngles(text, { lang }); // detiene pronunciaciones previas
     } else {
         alert('Tu navegador no soporta reproducción de voz interactiva.');
     }

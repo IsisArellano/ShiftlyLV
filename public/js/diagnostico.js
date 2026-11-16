@@ -715,14 +715,9 @@ const bancosPorCarrera = {
     ]
 };
 
+// Usa la voz femenina global (voz-femenina.js): OpenAI "nova" o la mejor voz del navegador
 function speakQuestion(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
-        u.rate = 0.92;
-        window.speechSynthesis.speak(u);
-    }
+    if (window.reproducirAudioIngles) window.reproducirAudioIngles(text);
 }
 
 function iniciarDiagnosticoCompleto() {

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('css/ejercicios.css') }}?v=2">
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" data-url-ejercicios="{{ url('/ejercicios') }}" data-url-ruta="{{ url('/ruta-') }}">
 
     <!-- ==========================================
          NAVBAR CORPORATIVO SHIFTLY
@@ -61,11 +61,11 @@
         <div class="container-xl">
             <div class="row align-items-center g-3">
                 <div class="col-lg-7">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill fw-bold small mb-2" style="background: rgba(255,107,53,0.2); color: #FFB08E; border: 1.5px solid rgba(255,107,53,0.45);">
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill fw-bold small mb-2" id="badgeLeccion" style="background: rgba(255,107,53,0.2); color: #FFB08E; border: 1.5px solid rgba(255,107,53,0.45);">
                         <i class="bi bi-layers-fill"></i> UNIDAD 03 · LECCIÓN 2 DE 5
                     </div>
-                    <h1 class="h2 fw-extrabold mb-1">Rutinas y Entorno Profesional</h1>
-                    <p class="text-white-50 mb-0 small">Completa los 6 retos interactivos para dominar el presente simple y expresiones técnicas diarias.</p>
+                    <h1 class="h2 fw-extrabold mb-1" id="tituloLeccion">Rutinas y Entorno Profesional</h1>
+                    <p class="text-white-50 mb-0 small" id="descripcionLeccion">Completa los 6 retos interactivos para dominar el presente simple y expresiones técnicas diarias.</p>
                 </div>
 
                 <!-- Contadores Gamificados -->
@@ -421,6 +421,12 @@
                         </div>
                     </div>
 
+                    <!-- ==========================================
+                         MODO LECCIÓN (?carrera=…&leccion=…)
+                         Lo dibuja public/js/ejercicios-leccion.js
+                         ========================================== -->
+                    <div id="practicaLeccion" class="d-none" aria-live="polite"></div>
+
                     <!-- PIE DE NAVEGACIÓN DE LA TARJETA -->
                     <div id="lessonFooterNav" class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-4 pt-3 border-top" style="border-color: var(--border-purple) !important;">
                         <span class="text-muted small fw-bold">
@@ -458,10 +464,10 @@
                             <h3 class="h6 fw-extrabold mb-0" style="color: var(--purple-dark);">
                                 <i class="bi bi-book-half me-1" style="color: var(--purple-medium);"></i> Palabras Clave
                             </h3>
-                            <span class="badge rounded-pill" style="background-color: var(--purple-soft); color: var(--purple-main);">Unidad 03</span>
+                            <span class="badge rounded-pill" id="badgePalabras" style="background-color: var(--purple-soft); color: var(--purple-main);">Unidad 03</span>
                         </div>
 
-                        <div class="d-flex flex-column gap-2 small">
+                        <div class="d-flex flex-column gap-2 small" id="palabrasClave">
                             <div class="p-2 rounded-3 d-flex justify-content-between align-items-center" style="background-color: var(--purple-light);">
                                 <div>
                                     <strong style="color: var(--purple-dark);">Deadline</strong>
@@ -512,15 +518,81 @@
         </div>
     </footer>
 
+    <!-- ==========================================
+         MODAL: CONFIGURAR API KEY DE CHATGPT / OPENAI
+         ========================================== -->
+    <div class="modal fade" id="modalApiKey" tabindex="-1" aria-labelledby="tituloModalApiKey" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-ia">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5 fw-extrabold" id="tituloModalApiKey">
+                        <i class="bi bi-stars me-1"></i> Configurar API Key de ChatGPT / OpenAI
+                    </h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted">
+                        Con una API Key de OpenAI puedes generar retos inéditos con <strong>ChatGPT (gpt-4o-mini)</strong>.
+                        Sin clave, Shiftly usa los ejercicios locales de cada lección.
+                    </p>
+                    <div id="estadoApiKey" class="small fw-bold mb-3"></div>
+
+                    <label for="inputApiKey" class="form-label fw-bold small">API Key de OpenAI</label>
+                    <div class="input-group mb-1">
+                        <input type="password" class="form-control input-api-key" id="inputApiKey" placeholder="sk-..." autocomplete="off" spellcheck="false">
+                        <button class="btn btn-3d-ghost" type="button" id="btnVerApiKey" title="Mostrar u ocultar clave"><i class="bi bi-eye"></i></button>
+                        <div class="invalid-feedback">La clave parece incompleta. Cópiala completa desde la plataforma de OpenAI.</div>
+                    </div>
+                    <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="small fw-bold" style="color: var(--orange-bright);">
+                        Obtener una API Key en OpenAI Platform <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+
+                    <div class="alert alert-warning rounded-4 small mt-3 mb-0">
+                        <i class="bi bi-shield-lock-fill me-1"></i>
+                        La clave se guarda solo en este navegador (<code>localStorage</code>) y nunca en el código.
+                        No la uses en computadoras compartidas.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-3d-ghost text-danger d-none me-auto" id="btnBorrarApiKey">
+                        <i class="bi bi-trash3 me-1"></i> Borrar clave
+                    </button>
+                    <button type="button" class="btn btn-3d-ghost" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-3d-orange" id="btnGuardarApiKey">
+                        <i class="bi bi-save me-1"></i> Guardar clave
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script de Ejercicios Interactivos -->
-    <script src="{{ asset('js/ejercicios.js') }}?v=2"></script>
+    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
+    <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
+    <!-- Bancos locales de ejercicios por carrera -->
+    <script src="{{ asset('js/ejercicios-sistemas.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-medicina.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-gastronomia.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-derecho.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-arquitectura.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-general.js') }}"></script>
+
+    <!-- Servicio de IA (ChatGPT / OpenAI) y modo lección -->
+    <script src="{{ asset('js/openai-ejercicios.js') }}"></script>
+    <script src="{{ asset('js/ejercicios-leccion.js') }}"></script>
+
+    <!-- Script de Ejercicios Interactivos (práctica general sin parámetros) -->
+    <script src="{{ asset('js/ejercicios.js') }}?v=3"></script>
 
     <!-- Sincronización con LocalStorage de Laravel -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // En modo lección el progreso se guarda en la clave de la ruta (ejercicios-leccion.js)
+            if (window.SHIFTLY_MODO_LECCION) return;
+
             const userId = @json(auth()->id());
             const textoProgreso = document.querySelector('.progress-copy');
             if (!textoProgreso) return;

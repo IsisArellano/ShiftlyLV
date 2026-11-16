@@ -12,26 +12,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const toastElemento = document.getElementById('toastNotificacion');
     const toastBootstrap = toastElemento && typeof bootstrap !== 'undefined' ? new bootstrap.Toast(toastElemento) : null;
 
-    const STORAGE_KEY = 'shiftly_user_profile';
+    // Misma clave que usa perfil.js e index.blade.php para que el perfil sea uno solo
+    const STORAGE_KEY = 'shiftly_user_profile_full';
+    const SESSION_KEY = 'shiftly_usuario_activo';
 
-    // --- 1. LEER (READ): Cargar datos desde localStorage al iniciar ---
+    function leerJSON(clave) {
+        try {
+            return JSON.parse(localStorage.getItem(clave) || 'null');
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function mostrarPerfil(nombre, correo) {
+        if (inputNombre) inputNombre.value = nombre;
+        if (inputCorreo) inputCorreo.value = correo;
+        if (displayUsername) displayUsername.textContent = nombre || 'Usuario';
+        if (displayEmail) displayEmail.textContent = correo || 'ejemplo@correo.com';
+    }
+
+    // --- 1. LEER (READ): perfil guardado, luego sesión activa, luego valores demo ---
     function cargarDatosPerfil() {
-        const datosGuardados = localStorage.getItem(STORAGE_KEY);
+        const perfil = leerJSON(STORAGE_KEY);
+        const sesion = leerJSON(SESSION_KEY);
 
-        if (datosGuardados) {
-            const perfil = JSON.parse(datosGuardados);
-            if (inputNombre) inputNombre.value = perfil.username || '';
-            if (inputCorreo) inputCorreo.value = perfil.email || '';
-
-            if (displayUsername) displayUsername.textContent = perfil.username || 'Usuario';
-            if (displayEmail) displayEmail.textContent = perfil.email || 'ejemplo@correo.com';
+        if (perfil) {
+            const nombreCompleto = [perfil.nombre, perfil.apellido].filter(Boolean).join(' ');
+            mostrarPerfil(nombreCompleto, perfil.email || '');
+        } else if (sesion) {
+            mostrarPerfil(sesion.nombre || '', sesion.email || '');
         } else {
-            // Valores demostrativos por defecto
-            if (inputNombre) inputNombre.value = 'Usuario Demo';
-            if (inputCorreo) inputCorreo.value = 'usuario@shiftly.com';
-
-            if (displayUsername) displayUsername.textContent = 'Usuario Demo';
-            if (displayEmail) displayEmail.textContent = 'usuario@shiftly.com';
+            mostrarPerfil('Usuario Demo', 'usuario@shiftly.com');
         }
     }
 
@@ -79,9 +90,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const usernameVal = inputNombre.value.trim();
             const emailVal = inputCorreo.value.trim();
 
-            // Guardar en localStorage
+            // Guardar en localStorage conservando los demás campos del perfil (área, nivel...)
+            const partes = usernameVal.split(/\s+/);
             const perfilActualizado = {
-                username: usernameVal,
+                ...(leerJSON(STORAGE_KEY) || {}),
+                nombre: partes[0],
+                apellido: partes.slice(1).join(' '),
                 email: emailVal,
                 updatedAt: new Date().toISOString()
             };

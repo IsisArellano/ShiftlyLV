@@ -120,4 +120,26 @@ body {
     transition: all 0.25s ease;
 }
 
+/* Botón para abrir el árbol de lecciones de la carrera */
+.btn-ver-arbol {
+    background-color: var(--orange-bright);
+    color: var(--white);
+    border: none;
+    border-radius: 0.9rem;
+    font-weight: 700;
+    box-shadow: 0 4px 0 #C9440E;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.2s ease;
+}
+
+.btn-ver-arbol:hover,
+.btn-ver-arbol:focus-visible {
+    background-color: #FF7D45;
+    color: var(--white);
+}
+
+.btn-ver-arbol:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #C9440E;
+}
+
 .tarjeta-modulo:hover   

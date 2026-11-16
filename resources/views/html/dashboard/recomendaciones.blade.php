@@ -127,7 +127,7 @@
                 <nav class="d-none d-md-flex gap-4 fs-6 fw-medium">
                     <a href="#" class="text-brand-secondary text-decoration-none fw-bold border-bottom border-3 border-brand-secondary py-3">Dashboard</a>
                     <a href="#" class="text-secondary text-decoration-none py-3">Mis Cursos</a>
-                    <a href="#" class="text-secondary text-decoration-none py-3">Rutas de Aprendizaje</a>
+                    <a href="{{ url('/ruta-aprendizaje') }}" class="text-secondary text-decoration-none py-3">Rutas de Aprendizaje</a>
                     <a href="#" class="text-secondary text-decoration-none py-3">Reportes</a>
                 </nav>
             </div>
@@ -238,7 +238,7 @@
                                     <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
-                            <a href="#start-lesson" class="btn btn-lg bg-brand-secondary text-white w-100 w-sm-auto px-4 py-2 rounded-3 text-decoration-none shadow-sm fw-semibold fs-6">
+                            <a href="{{ url('/ruta-general') }}" id="btnComenzarRutaCarrera" class="btn btn-lg bg-brand-secondary text-white w-100 w-sm-auto px-4 py-2 rounded-3 text-decoration-none shadow-sm fw-semibold fs-6">
                                 <span>Comenzar lección</span>
                                 <svg width="16" height="16" class="ms-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
@@ -262,9 +262,9 @@
                         <button class="btn btn-outline-secondary text-brand-primary border-brand-accent fw-semibold">
                             Repasar lecciones anteriores
                         </button>
-                        <button class="btn bg-brand-secondary text-white fw-semibold">
+                        <a href="{{ url('/ruta-aprendizaje') }}" class="btn bg-brand-secondary text-white fw-semibold">
                             Explorar catálogo de cursos
-                        </button>
+                        </a>
                     </div>
                 </section>
 
@@ -277,9 +277,9 @@
                     <p class="text-brand-primary text-opacity-75 small mx-auto mb-4" style="max-width: 380px;">
                         Actualmente no tienes un plan de estudios activo. Selecciona una ruta para comenzar a recomendarte clases.
                     </p>
-                    <button class="btn bg-brand-primary text-white fw-semibold px-4">
+                    <a href="{{ url('/ruta-aprendizaje') }}" class="btn bg-brand-primary text-white fw-semibold px-4">
                         Solicitar o Inscribir Ruta
-                    </button>
+                    </a>
                 </section>
 
                 <!-- ADDITIONAL DASHBOARD SECTION -->
@@ -369,6 +369,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
+    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
+    <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
     <script src="{{ asset('js/diagnostico.js') }}"></script>
+
+    <!-- "Comenzar lección" abre el árbol de la carrera del usuario (perfil o sesión activa) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const boton = document.getElementById("btnComenzarRutaCarrera");
+            if (!boton) return;
+
+            const leer = (clave) => {
+                try { return JSON.parse(localStorage.getItem(clave) || "null"); } catch (e) { return null; }
+            };
+            const perfil = leer("shiftly_user_profile_full");
+            const sesion = leer("shiftly_usuario_activo");
+            const carrera = ((perfil && perfil.area) || (sesion && sesion.carrera) || "").toLowerCase();
+
+            const rutas = {
+                sistema: "{{ url('/ruta-sistemas') }}",
+                medic: "{{ url('/ruta-medicina') }}",
+                gastro: "{{ url('/ruta-gastronomia') }}",
+                derecho: "{{ url('/ruta-derecho') }}",
+                arquitec: "{{ url('/ruta-arquitectura') }}"
+            };
+            const clave = Object.keys(rutas).find((k) => carrera.includes(k));
+            if (clave) boton.href = rutas[clave];
+        });
+    </script>
 </body>
 </html>
