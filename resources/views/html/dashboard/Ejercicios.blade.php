@@ -19,6 +19,9 @@
 
     <!-- Estilos Propios -->
     <link rel="stylesheet" href="{{ asset('css/ejercicios.css') }}?v=2">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
 </head>
 
 <body class="d-flex flex-column min-vh-100" data-url-ejercicios="{{ url('/ejercicios') }}" data-url-ruta="{{ url('/ruta-') }}">
@@ -582,6 +585,11 @@
 
     <!-- Servicio de IA (ChatGPT / OpenAI) y modo lección -->
     <script src="{{ asset('js/openai-ejercicios.js') }}"></script>
+
+    <!-- Progreso global: racha diaria, meta del día e insignias -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
     <script src="{{ asset('js/ejercicios-leccion.js') }}"></script>
 
     <!-- Script de Ejercicios Interactivos (práctica general sin parámetros) -->

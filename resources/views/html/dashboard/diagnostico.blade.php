@@ -256,8 +256,9 @@
                     </div>
 
                     <div class="d-flex flex-wrap justify-content-center gap-3">
-                        <a href="{{ url('/ejercicios') }}" class="btn btn-3d-orange">
-                            <i class="bi bi-lightning-charge-fill"></i> Comenzar a Practicar
+                        <!-- diagnostico.js apunta este botón a la lección recomendada de tu carrera -->
+                        <a href="{{ url('/ejercicios') }}" class="btn btn-3d-orange" id="btnRutaRecomendada" data-url-base="{{ url('/') }}">
+                            <i class="bi bi-lightning-charge-fill"></i> <span id="textoRutaRecomendada">Comenzar a Practicar</span>
                         </a>
                         <a href="{{ url('/glosario') }}" class="btn btn-3d-purple">
                             <i class="bi bi-journal-bookmark-fill me-1"></i> Ir al Glosario Técnico
@@ -359,7 +360,11 @@
     <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
     <script src="{{ asset('js/voz-femenina.js') }}"></script>
 
-    <script src="{{ asset('js/diagnostico.js') }}?v=2"></script>
+    <!-- Catálogo de rutas: conecta el nivel obtenido con la lección inicial recomendada -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+
+    <script src="{{ asset('js/diagnostico.js') }}?v=3"></script>
 </body>
 
 </html>

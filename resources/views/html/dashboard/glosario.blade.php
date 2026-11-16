@@ -16,6 +16,10 @@
     
     <!-- Estilos Propios del Glosario -->
     <link rel="stylesheet" href="{{ asset('css/glosario-style.css') }}?v=2">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#1A0B2E">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -108,6 +112,7 @@
                 <button class="btn btn-filter" data-filter="Gastronomía" onclick="filterBySector('Gastronomía', this)">Gastronomía</button>
                 <button class="btn btn-filter" data-filter="Derecho" onclick="filterBySector('Derecho', this)">Derecho</button>
                 <button class="btn btn-filter" data-filter="Arquitectura" onclick="filterBySector('Arquitectura', this)">Arquitectura</button>
+                <button class="btn btn-filter" data-filter="General" onclick="filterBySector('General', this)">General</button>
             </div>
         </div>
 
@@ -404,6 +409,63 @@
                 </div>
             </div>
 
+            <!-- GENERAL -->
+            <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="General">
+                <div class="card glossary-card h-100">
+                    <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-general') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Inglés General">
+                        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=600&auto=format&fit=crop" alt="Inglés General">
+                        <span class="badge sector-badge"><i class="bi bi-globe-americas me-1 text-info"></i> Global</span>
+                        </a>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-general') }}" class="enlace-titulo-ruta">General</a></h2>
+                                <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
+                            </div>
+                            <p class="text-muted small mb-0">Comunicación internacional, reuniones, viajes y correos.</p>
+                            <a href="{{ url('/ruta-general') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
+                        </div>
+
+                        <div class="vocab-accordion pt-2">
+                            <button class="btn btn-purple-accordion w-100 d-flex align-items-center justify-content-between" type="button" onclick="toggleVocab(this)">
+                                <span><i class="bi bi-card-list me-2"></i>Ver vocabulario</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </button>
+
+                            <div class="vocab-list mt-3 d-none">
+                                <ul class="list-group list-group-flush small">
+                                    <li class="list-group-item vocab-item" data-term="Deadline Fecha límite Entrega">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="term-text">Deadline</span>
+                                            <button class="btn btn-sm btn-audio" onclick="speakText('Deadline')" title="Escuchar pronunciación">
+                                                <i class="bi bi-volume-up-fill"></i>
+                                            </button>
+                                        </div>
+                                        <div class="translation-wrapper mt-2">
+                                            <button class="btn-reveal" onclick="toggleTranslation(this)"><i class="bi bi-eye-fill me-1"></i>Revelar traducción</button>
+                                            <span class="translation-text d-none">Fecha límite / Entrega</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item vocab-item" data-term="Follow up Dar seguimiento Correo">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="term-text">Follow up</span>
+                                            <button class="btn btn-sm btn-audio" onclick="speakText('Follow up')" title="Escuchar pronunciación">
+                                                <i class="bi bi-volume-up-fill"></i>
+                                            </button>
+                                        </div>
+                                        <div class="translation-wrapper mt-2">
+                                            <button class="btn-reveal" onclick="toggleTranslation(this)"><i class="bi bi-eye-fill me-1"></i>Revelar traducción</button>
+                                            <span class="translation-text d-none">Dar seguimiento</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- MENSAJE NO RESULTADOS -->
@@ -442,5 +504,6 @@
     <script src="{{ asset('js/voz-femenina.js') }}"></script>
 
     <script src="{{ asset('js/glosario-scrip.js') }}"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
 </body>
 </html>

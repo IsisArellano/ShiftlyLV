@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/resultado.css') }}">
 </head>
 
-<body>
+<body data-url-base="{{ url('/') }}">
 
     <!-- NAVBAR CORPORATIVO -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 sticky-top">
@@ -95,7 +95,7 @@
 
             <!-- BOTONES DE ACCIÓN -->
             <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
-                <button type="button" class="btn btn-outline-custom px-4 py-2" data-bs-toggle="modal" data-bs-target="#modal-revision">
+                <button type="button" class="btn btn-outline-custom px-4 py-2" data-bs-toggle="modal" data-bs-target="#modal-revision" id="btnRevisarRespuestas">
                     <i class="bi bi-search me-1"></i> Revisar mis respuestas
                 </button>
 
@@ -103,7 +103,7 @@
                     <i class="bi bi-arrow-counterclockwise me-1"></i> Repetir diagnóstico
                 </a>
 
-                <a href="{{ url('/ruta-aprendizaje') }}" class="btn btn-continuar px-4 py-2 text-center text-decoration-none">
+                <a href="{{ url('/ruta-aprendizaje') }}" class="btn btn-continuar px-4 py-2 text-center text-decoration-none" id="btnContinuarDiagnostico">
                     Continuar <i class="bi bi-arrow-right ms-1"></i>
                 </a>
             </div>
@@ -143,11 +143,10 @@
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script de diagnóstico JS -->
-    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
-    <script src="{{ asset('js/voz-femenina.js') }}"></script>
-
-    <script src="{{ asset('js/diagnostico.js') }}"></script>
+    <!-- Muestra el resultado real guardado por el examen diagnóstico -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/resultado.js') }}"></script>
 
 </body>
 </html>

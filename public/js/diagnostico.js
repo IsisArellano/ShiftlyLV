@@ -965,6 +965,18 @@ function iniciarDiagnosticoCompleto() {
         document.getElementById('resultado-recomendacion').textContent =
             `${infoNivel.recomendacion} Te recomendamos iniciar con el glosario y ejercicios especializados de ${carreraElegida}.`;
 
+        // Conecta el resultado con la ruta de la carrera (shiftly-progreso.js)
+        const btnRuta = document.getElementById('btnRutaRecomendada');
+        const diag = window.ShiftlyProgreso ? window.ShiftlyProgreso.diagnostico() : null;
+        if (btnRuta && diag && diag.leccionRecomendada) {
+            const base = (btnRuta.dataset.urlBase || '').replace(/\/$/, '');
+            const leccion = diag.leccionRecomendada;
+            btnRuta.href = `${base}/ejercicios?carrera=${diag.slug}&leccion=${leccion.numero}`;
+            document.getElementById('textoRutaRecomendada').textContent = `Empezar en la Lección ${leccion.numero}: ${leccion.titulo}`;
+            document.getElementById('resultado-recomendacion').textContent +=
+                ` Según tu nivel ${infoNivel.nivel}, empieza tu ruta de ${diag.carreraNombre} en la lección ${leccion.numero}. Desde tu Panel puedes saltar las lecciones anteriores.`;
+        }
+
         const listaRevision = document.getElementById('lista-revision');
         listaRevision.innerHTML = '';
 

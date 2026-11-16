@@ -17,6 +17,10 @@
 
     <!-- Estilos Exclusivos de Index (con control de caché) -->
     <link rel="stylesheet" href="{{ asset('css/index.css') }}?v=4">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#180C2E">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -210,7 +214,7 @@
                 <p class="text-muted small mb-0">Selecciona tu área para explorar su vocabulario técnico y ejercicios</p>
             </div>
 
-            <div class="row g-3 justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
+            <div class="row g-3 justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-6">
                 
                 <!-- 1. Sistemas y Software -->
                 <div class="col">
@@ -277,6 +281,20 @@
                         </div>
                         <div class="p-3 text-center d-flex flex-column flex-grow-1 justify-content-between">
                             <h3 class="h6 fw-extrabold mb-1">Arquitectura</h3>
+                            <span class="small fw-bold" style="color: var(--orange-bright);">Explorar ruta <i class="bi bi-arrow-right-short"></i></span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 6. Inglés General -->
+                <div class="col">
+                    <a href="{{ url('/ruta-general') }}" class="career-card-img">
+                        <div class="career-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80" alt="Inglés General">
+                            <span class="career-img-badge"><i class="bi bi-globe-americas me-1 text-info"></i> Global</span>
+                        </div>
+                        <div class="p-3 text-center d-flex flex-column flex-grow-1 justify-content-between">
+                            <h3 class="h6 fw-extrabold mb-1">Inglés General</h3>
                             <span class="small fw-bold" style="color: var(--orange-bright);">Explorar ruta <i class="bi bi-arrow-right-short"></i></span>
                         </div>
                     </a>
@@ -540,6 +558,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
 
     <!-- Interactividad del Mini-Reto en el Hero -->
     <script>

@@ -17,6 +17,10 @@
 
     <!-- Estilos exclusivos de la ruta -->
     <link rel="stylesheet" href="{{ asset('css/ruta-sistemas.css') }}">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#180C2E">
 </head>
 
 <body data-url-ejercicios="{{ url('/ejercicios') }}">
@@ -145,6 +149,9 @@
                             </button>
                             <a href="{{ url('/ejercicios') }}" class="btn btn-claro" id="enlacePracticarSiguiente">
                                 <i class="bi bi-pencil-square me-1"></i> Practicar ejercicios
+                            </a>
+                            <a href="{{ url('/ejercicios') }}" class="btn btn-claro d-none" id="enlaceRepasarErrores">
+                                <i class="bi bi-arrow-repeat me-1"></i> Repasar mis errores (<span id="contadorErrores">0</span>)
                             </a>
                         </div>
                     </section>
@@ -338,6 +345,11 @@
 
     <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
     <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
+    <!-- Catálogo de rutas y progreso global (racha, meta diaria, insignias) -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
 
     <!-- JS exclusivo de la ruta -->
     <script src="{{ asset('js/ruta-sistemas.js') }}"></script>

@@ -18,9 +18,13 @@
     <!-- Estilos de Shiftly -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#1A0B2E">
 </head>
 
-<body>
+<body data-url-base="{{ url('/') }}">
 
     <!-- NAVBAR CORPORATIVO -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 sticky-top">
@@ -50,6 +54,126 @@
             <span class="badge rounded-pill px-3 py-2 text-uppercase fw-bold mb-2" style="background-color: var(--orange-bright); color: var(--white);">Mi Cuenta</span>
             <h1 class="display-5 fw-extrabold mb-2" style="color: var(--purple-dark);">Panel del Usuario</h1>
             <p class="text-muted mx-auto" style="max-width: 550px;">Gestiona tu información personal y accede a las herramientas de aprendizaje técnico de Shiftly.</p>
+        </div>
+
+        <!-- ==========================================
+             PROGRESO GLOBAL (dashboard-progreso.js)
+             ========================================== -->
+        <div class="row g-4 mb-4">
+
+            <!-- Resumen global + racha -->
+            <div class="col-lg-8">
+                <section class="card card-custom p-4 h-100">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <h2 class="card-title-custom d-flex align-items-center gap-2 fs-5 mb-0">
+                            <i class="bi bi-graph-up-arrow" style="color: var(--orange-bright);"></i>
+                            Mi Progreso Global
+                        </h2>
+                        <span class="badge rounded-pill px-3 py-2 nivel-global" id="nivelGlobal">Explorador</span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6 col-md-3">
+                            <div class="stat-tile">
+                                <i class="bi bi-lightning-charge-fill" style="color: var(--orange-bright);"></i>
+                                <div class="stat-tile-valor" id="xpGlobal">0</div>
+                                <div class="stat-tile-etiqueta">XP total</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-tile">
+                                <i class="bi bi-check2-circle text-success"></i>
+                                <div class="stat-tile-valor" id="leccionesGlobal">0/0</div>
+                                <div class="stat-tile-etiqueta">Lecciones</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-tile">
+                                <i class="bi bi-fire" style="color: #F97316;"></i>
+                                <div class="stat-tile-valor" id="rachaActual">0</div>
+                                <div class="stat-tile-etiqueta">Días de racha</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-tile">
+                                <i class="bi bi-bullseye" style="color: var(--purple-medium);"></i>
+                                <div class="stat-tile-valor" id="precisionGlobal">—</div>
+                                <div class="stat-tile-etiqueta">Precisión</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between small fw-bold mb-1">
+                        <span class="text-muted">Avance en las 6 rutas</span>
+                        <span style="color: var(--purple-main);" id="porcentajeGlobal">0%</span>
+                    </div>
+                    <div class="progress progress-global mb-4" role="progressbar" aria-label="Avance global">
+                        <div class="progress-bar" id="barraGlobal" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                        <span class="small fw-bold text-muted"><i class="bi bi-calendar-week me-1"></i> Últimos 7 días</span>
+                        <span class="small text-muted">Mejor racha: <strong id="mejorRacha">0</strong> días</span>
+                    </div>
+                    <div class="semana-racha" id="semanaRacha"></div>
+                </section>
+            </div>
+
+            <!-- Meta del día -->
+            <div class="col-lg-4">
+                <section class="card card-custom p-4 h-100">
+                    <h2 class="card-title-custom d-flex align-items-center gap-2 fs-5">
+                        <i class="bi bi-flag-fill" style="color: var(--orange-bright);"></i>
+                        Meta del Día
+                    </h2>
+                    <div class="text-center my-2">
+                        <div class="meta-anillo" id="metaAnillo" style="--avance: 0;">
+                            <div class="meta-anillo-centro">
+                                <div class="fw-extrabold fs-3" style="color: var(--purple-dark);" id="metaXpHoy">0</div>
+                                <div class="small text-muted">de <span id="metaObjetivo">30</span> XP</div>
+                            </div>
+                        </div>
+                        <p class="small fw-semibold mt-3 mb-3" id="metaMensaje">Completa una lección para empezar tu racha.</p>
+                    </div>
+                    <label for="selectMeta" class="form-label small fw-bold mb-1">Mi meta diaria</label>
+                    <select class="form-select form-control-custom mb-3" id="selectMeta">
+                        <option value="10">Casual · 10 XP</option>
+                        <option value="20">Regular · 20 XP</option>
+                        <option value="30">Constante · 30 XP</option>
+                        <option value="50">Intenso · 50 XP</option>
+                        <option value="100">Imparable · 100 XP</option>
+                    </select>
+                    <a href="{{ url('/ruta-aprendizaje') }}" class="btn-nav-item destacado mt-auto" id="btnContinuarRuta">
+                        <span><i class="bi bi-play-fill me-2"></i><span id="textoContinuarRuta">Continuar aprendiendo</span></span>
+                        <i class="bi bi-arrow-right-short fs-5"></i>
+                    </a>
+                </section>
+            </div>
+
+            <!-- Diagnóstico conectado -->
+            <div class="col-lg-5">
+                <section class="card card-custom p-4 h-100" id="tarjetaDiagnostico">
+                    <h2 class="card-title-custom d-flex align-items-center gap-2 fs-5">
+                        <i class="bi bi-clipboard2-pulse-fill" style="color: var(--purple-medium);"></i>
+                        Mi Diagnóstico
+                    </h2>
+                    <div id="contenidoDiagnostico"></div>
+                </section>
+            </div>
+
+            <!-- Insignias -->
+            <div class="col-lg-7">
+                <section class="card card-custom p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="card-title-custom d-flex align-items-center gap-2 fs-5 mb-0">
+                            <i class="bi bi-award-fill" style="color: var(--orange-bright);"></i>
+                            Insignias
+                        </h2>
+                        <span class="badge rounded-pill text-bg-light border" id="contadorInsignias">0/0</span>
+                    </div>
+                    <div class="insignias-grid" id="gridInsignias"></div>
+                </section>
+            </div>
         </div>
 
         <div class="row g-4">
@@ -154,7 +278,8 @@
                     </h5>
                     <p class="text-muted small mb-3">Elige tu área profesional para continuar con tu ruta gamificada.</p>
 
-                    <div class="row g-3">
+                    <!-- dashboard-progreso.js reemplaza estos enlaces por tarjetas con el avance de cada ruta -->
+                    <div class="row g-3" id="progresoCarreras">
                         <div class="col-sm-6 col-lg-4">
                             <a href="{{ url('/ruta-sistemas') }}" class="btn-nav-item">
                                 <span><i class="bi bi-cpu me-2"></i>Sistemas y TI</span>
@@ -230,6 +355,12 @@
 
     <!-- JS del Dashboard (CRUD Simulado) -->
     <script src="{{ asset('js/dashboard.js') }}"></script>
+
+    <!-- Progreso global, racha, meta diaria, insignias y diagnóstico -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/dashboard-progreso.js') }}"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
 </body>
 
 </html>

@@ -269,6 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const siguienteDescripcion = document.getElementById("siguienteDescripcion");
     const btnSiguiente = document.getElementById("btnAbrirSiguiente");
     const enlacePracticarSiguiente = document.getElementById("enlacePracticarSiguiente");
+    const enlaceRepasarErrores = document.getElementById("enlaceRepasarErrores");
+    const contadorErrores = document.getElementById("contadorErrores");
     const enlaceEjerciciosDetalle = document.getElementById("enlaceEjerciciosDetalle");
     const URL_EJERCICIOS = document.body.dataset.urlEjercicios || "/ejercicios";
 
@@ -532,6 +534,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         metaFinal.classList.toggle("lograda", resumen.porcentaje === 100);
 
+        // Repaso de errores guardados por /ejercicios
+        const errores = Array.isArray(progreso.errores) ? progreso.errores.length : 0;
+        enlaceRepasarErrores.classList.toggle("d-none", !AREA.ejercicios || errores === 0);
+        contadorErrores.textContent = errores;
+        enlaceRepasarErrores.href = `${URL_EJERCICIOS}?carrera=${encodeURIComponent(AREA.slug)}&repaso=1`;
+
         const actual = items.find((i) => i.estado === "actual");
         if (actual) {
             siguienteTitulo.textContent = actual.leccion.titulo;
@@ -649,6 +657,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         progreso.completadas = [...new Set([...progreso.completadas, item.leccion.id])];
         guardarProgreso();
+        // Racha diaria, meta del día e insignias (shiftly-progreso.js)
+        if (window.ShiftlyProgreso) window.ShiftlyProgreso.registrarActividad({ xp: Number(item.leccion.xp) || 0 });
         recienCompletada = item.leccion.id;
         modalLeccion.hide();
         render();

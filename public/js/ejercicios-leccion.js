@@ -17,9 +17,12 @@
     const params = new URLSearchParams(window.location.search);
     const CARRERA = (params.get("carrera") || "").trim().toLowerCase();
     const LECCION_PARAM = (params.get("leccion") || "").trim();
+    // ?carrera=…&repaso=1 → practica los ejercicios que el alumno falló antes
+    const MODO_REPASO = params.get("repaso") === "1";
+    const MAX_ERRORES = 40;
 
     // Bandera leída por ejercicios.js y el script de sincronización de la vista
-    window.SHIFTLY_MODO_LECCION = Boolean(CARRERA && LECCION_PARAM);
+    window.SHIFTLY_MODO_LECCION = Boolean(CARRERA && (LECCION_PARAM || MODO_REPASO));
     if (!window.SHIFTLY_MODO_LECCION) return;
 
     const SESSION_KEY = "shiftly_usuario_activo";
@@ -135,6 +138,8 @@
             else if (porcentaje >= 60) { clase = "medio"; mensaje = "¡Casi! Repite con calma."; }
             salida.className = `resultado-voz ${clase}`;
             salida.innerHTML = `<strong>${porcentaje}%</strong> · ${mensaje}<br><span class="small">Escuché: «${escaparHTML(mejor.t)}»</span>`;
+            // Para la insignia "Buena dicción"
+            if (window.ShiftlyProgreso) window.ShiftlyProgreso.registrarPronunciacion(porcentaje);
         };
 
         rec.onerror = (evento) => {
@@ -222,6 +227,7 @@
                 total: resumen.total,
                 vidas: resumen.vidas,
                 fuente: resumen.fuente,
+                duracionSeg: resumen.duracionSeg,
                 fecha: new Date().toISOString()
             }
         };
@@ -234,6 +240,53 @@
             actualAntes,
             siguiente: leccionActual(orden, progreso.completadas)
         };
+    }
+
+    // ==========================================================
+    // ERRORES PARA REPASO (progreso.errores en la misma clave de la ruta)
+    // ==========================================================
+    function claveEjercicio(leccionId, ej) {
+        const firma = ej.frase || ej.antes || ej.audio
+            || (ej.palabras || []).join(" ")
+            || (ej.pares || []).map((p) => p.en).join("|");
+        return `${leccionId}|${ej.tipo}|${firma}`;
+    }
+
+    function modificarProgreso(banco, cambio) {
+        const { todos, progreso } = leerProgresoUsuario(banco);
+        progreso.errores = Array.isArray(progreso.errores) ? progreso.errores : [];
+        cambio(progreso);
+        progreso.actualizado = new Date().toISOString();
+        todos[obtenerUsuarioId()] = progreso;
+        localStorage.setItem(banco.claveProgreso, JSON.stringify(todos));
+        return progreso;
+    }
+
+    function registrarError(banco, leccion, ej) {
+        const clave = claveEjercicio(leccion.id, ej);
+        modificarProgreso(banco, (progreso) => {
+            if (progreso.errores.some((e) => e.clave === clave)) return;
+            progreso.errores.push({
+                clave,
+                leccionId: leccion.id,
+                leccionTitulo: leccion.titulo,
+                ejercicio: ej,
+                fecha: new Date().toISOString()
+            });
+            // Se conservan los más recientes
+            progreso.errores = progreso.errores.slice(-MAX_ERRORES);
+        });
+    }
+
+    function quitarErrores(banco, claves) {
+        if (!claves.length) return modificarProgreso(banco, () => {}).errores.length;
+        return modificarProgreso(banco, (progreso) => {
+            progreso.errores = progreso.errores.filter((e) => !claves.includes(e.clave));
+        }).errores.length;
+    }
+
+    function registrarActividadDiaria(xp) {
+        if (window.ShiftlyProgreso) window.ShiftlyProgreso.registrarActividad({ xp });
     }
 
     // ==========================================================
@@ -275,13 +328,44 @@
         }
 
         const urlRuta = `${ui.urlRuta}${banco.slug}`;
-        const leccion = resolverLeccion(banco);
+        const leccion = MODO_REPASO ? leccionDeRepaso(banco) : resolverLeccion(banco);
+        if (MODO_REPASO && !leccion) {
+            mostrarError(ui, "¡No tienes errores pendientes en esta ruta! Sigue practicando lecciones nuevas.", urlRuta);
+            ui.badge.innerHTML = '<i class="bi bi-check2-circle"></i> Repaso al día';
+            ui.titulo.textContent = "Sin errores por repasar";
+            return;
+        }
         if (!leccion) {
             mostrarError(ui, "No encontramos esa lección en tu ruta. Puede que la lección personalizada se haya eliminado.", urlRuta);
             return;
         }
 
         new SesionLeccion(ui, banco, leccion, urlRuta).arrancar();
+    }
+
+    // Sesión de repaso: hasta 5 ejercicios fallados, los más antiguos primero
+    function leccionDeRepaso(banco) {
+        const { progreso } = leerProgresoUsuario(banco);
+        const errores = Array.isArray(progreso.errores) ? progreso.errores : [];
+        if (!errores.length) return null;
+        const seleccion = errores.slice(0, 5);
+        const terminos = seleccion
+            .flatMap((e) => (e.ejercicio.tipo === "emparejar" ? e.ejercicio.pares : []))
+            .slice(0, 6);
+        return {
+            id: "repaso",
+            numero: 0,
+            titulo: "Repaso de mis errores",
+            xp: 0,
+            consejo: `Tienes ${errores.length} ejercicio${errores.length === 1 ? "" : "s"} por repasar. Si aciertas a la primera, sale de tu lista.`,
+            terminos: terminos.length ? terminos : terminosDe(banco.general),
+            ejercicios: seleccion.map((e) => e.ejercicio),
+            clavesRepaso: seleccion.map((e) => e.clave),
+            totalErrores: errores.length,
+            personalizada: false,
+            repaso: true,
+            etiqueta: "Repaso"
+        };
     }
 
     // Lección base por número (1-8) o ID; si no, lección personalizada del usuario
@@ -375,7 +459,9 @@
             document.title = `Shiftly | ${banco.nombre} · ${leccion.titulo}`;
             ui.badge.innerHTML = `<i class="bi ${escaparHTML(banco.icono || "bi-mortarboard-fill")}"></i> ${escaparHTML(banco.nombre)} · ${escaparHTML(leccion.etiqueta)}: ${escaparHTML(leccion.titulo)}`;
             ui.titulo.textContent = leccion.titulo;
-            ui.descripcion.textContent = `Completa los ${Math.min(leccion.ejercicios.length, 5)} retos para ganar +${leccion.xp} XP y desbloquear la siguiente lección de tu ruta.`;
+            ui.descripcion.textContent = leccion.repaso
+                ? `Vuelve a resolver ${leccion.ejercicios.length} ejercicio${leccion.ejercicios.length === 1 ? "" : "s"} que fallaste. Si aciertas a la primera, sale de tu lista de errores.`
+                : `Completa los ${Math.min(leccion.ejercicios.length, 5)} retos para ganar +${leccion.xp} XP y desbloquear la siguiente lección de tu ruta.`;
             ui.consejo.textContent = leccion.consejo || "";
         }
 
@@ -458,7 +544,8 @@
         }
 
         actualizarBotonIA() {
-            const disponible = Boolean(window.ServicioIA && window.ServicioIA.tieneApiKey());
+            // En el repaso se practican los errores guardados, no retos nuevos
+            const disponible = Boolean(window.ServicioIA && window.ServicioIA.tieneApiKey()) && !this.leccion.repaso;
             $("btnGenerarIA").classList.toggle("d-none", !disponible);
         }
 
@@ -467,7 +554,9 @@
             fuente.className = `fuente-badge ${this.fuente}`;
             fuente.innerHTML = this.fuente === "ia"
                 ? '<i class="bi bi-stars"></i> Reto generado con ChatGPT'
-                : `<i class="bi bi-hdd-stack-fill"></i> Banco local · ${this.leccion.personalizada ? "práctica general" : `${this.ejercicios.length} retos de la lección`}`;
+                : this.leccion.repaso
+                    ? `<i class="bi bi-arrow-repeat"></i> Repaso · ${this.ejercicios.length} de ${this.leccion.totalErrores} errores`
+                    : `<i class="bi bi-hdd-stack-fill"></i> Banco local · ${this.leccion.personalizada ? "práctica general" : `${this.ejercicios.length} retos de la lección`}`;
         }
 
         avisoIA(tipo, html) {
@@ -491,6 +580,8 @@
             this.vidas = TOTAL_VIDAS;
             this.racha = 0;
             this.xpGanado = 0;
+            this.inicio = Date.now();
+            this.dominados = [];
 
             $("resumenLeccion").classList.add("d-none");
             $("zonaEjercicio").classList.remove("d-none");
@@ -838,6 +929,10 @@
         acierto(ej, mensaje) {
             this.resueltos.add(this.indice);
             if (this.fallosEnActual === 0) this.primerIntento++;
+            // En repaso, acertar a la primera saca el ejercicio de la lista de errores
+            if (this.leccion.repaso && this.fallosEnActual === 0) {
+                this.dominados.push(this.leccion.clavesRepaso[this.indice]);
+            }
             this.racha++;
             this.xpGanado += this.xpPorEjercicio(this.indice);
             this.actualizarStats();
@@ -854,6 +949,10 @@
 
         error(mensaje) {
             this.fallosEnActual++;
+            // El primer fallo de cada ejercicio se guarda para el repaso
+            if (this.fallosEnActual === 1 && !this.leccion.repaso) {
+                registrarError(this.banco, this.leccion, this.ejercicios[this.indice]);
+            }
             this.racha = 0;
             if (this.vidas > 0) this.vidas--;
             this.actualizarStats();
@@ -882,13 +981,20 @@
 
         // ---------------- Final de la lección ----------------
         finalizar() {
+            if (this.leccion.repaso) {
+                this.finalizarRepaso();
+                return;
+            }
             const total = this.ejercicios.length;
             const resultado = guardarResultado(this.banco, this.leccion, {
                 aciertosPrimerIntento: this.primerIntento,
                 total,
                 vidas: this.vidas,
-                fuente: this.fuente
+                fuente: this.fuente,
+                duracionSeg: Math.round((Date.now() - this.inicio) / 1000)
             });
+            // Racha diaria y meta del día: suma XP solo si la lección se completó por primera vez
+            registrarActividadDiaria(resultado.estado === "nueva" ? this.leccion.xp : 0);
 
             const nombreRuta = `Ruta de ${this.banco.nombre}`;
             let titulo = "¡Lección completada!";
@@ -971,6 +1077,48 @@
             this.ui.contador.textContent = "Resultados";
             this.ui.tipoIcono.textContent = "🏆";
             this.ui.tipoNombre.textContent = "Lección terminada";
+        }
+
+        // ---------------- Final del repaso de errores ----------------
+        finalizarRepaso() {
+            const total = this.ejercicios.length;
+            const restantes = quitarErrores(this.banco, this.dominados);
+            registrarActividadDiaria(0);
+
+            const nombreRuta = `Ruta de ${this.banco.nombre}`;
+            const repasarUrl = `${this.ui.urlEjercicios}?carrera=${encodeURIComponent(this.banco.slug)}&repaso=1`;
+            $("zonaEjercicio").classList.add("d-none");
+            $("accionesLeccion").classList.add("d-none");
+            this.mostrarFeedback(null);
+            this.avisoIA(null);
+
+            const resumen = $("resumenLeccion");
+            resumen.classList.remove("d-none");
+            resumen.innerHTML = `
+                <div class="text-center py-3">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 90px; height: 90px; background: linear-gradient(135deg, var(--purple-main), var(--purple-medium)); color: var(--white); font-size: 2.6rem; box-shadow: 0 8px 20px rgba(82,21,78,0.3);">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h2 class="display-6 fw-extrabold mb-2" style="color: var(--purple-dark);">${restantes ? "¡Repaso terminado!" : "¡Errores superados!"}</h2>
+                    <p class="text-muted mb-4 mx-auto" style="max-width: 520px;">
+                        Dominaste <strong>${this.dominados.length} de ${total}</strong> ejercicios a la primera.
+                        ${restantes
+                            ? `Te quedan <strong>${restantes}</strong> por repasar.`
+                            : "Ya no tienes errores pendientes en esta ruta."}
+                    </p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="${escaparHTML(this.urlRuta)}" class="btn btn-3d-orange">
+                            <i class="bi bi-diagram-3-fill me-1"></i> Volver a ${escaparHTML(nombreRuta)}
+                        </a>
+                        ${restantes ? `
+                        <a href="${escaparHTML(repasarUrl)}" class="btn btn-3d-purple">
+                            <i class="bi bi-arrow-repeat me-1"></i> Seguir repasando
+                        </a>` : ""}
+                    </div>
+                </div>`;
+            this.ui.contador.textContent = "Resultados";
+            this.ui.tipoIcono.textContent = "🔁";
+            this.ui.tipoNombre.textContent = "Repaso terminado";
         }
 
         // ---------------- Modal de API Key ----------------
