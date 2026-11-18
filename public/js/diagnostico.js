@@ -922,7 +922,7 @@ function iniciarDiagnosticoCompleto() {
         } catch (_) {
 
         }
-        window.location.href = `resultado.html?aciertos=${aciertos}`;
+        window.location.href = `/resultado?aciertos=${aciertos}`;
     });
     renderizarPregunta();
 }
@@ -970,7 +970,7 @@ function iniciarRecomendaciones() {
         if (textoRazon) textoRazon.textContent = `Tu diagnóstico indica un nivel ${resultado.nivel} (${resultado.nombre}). Esta lección te ayudará a seguir avanzando desde tu nivel actual.`;
     }
     const botonComenzar = document.querySelector('#card-active-state a[href="#start-lesson"]');
-    if (botonComenzar) botonComenzar.href = 'rutaDeAprendizaje.html';
+    if (botonComenzar) botonComenzar.href = '/ruta-aprendizaje';
 
     ['active', 'completed', 'empty'].forEach((estado) => {
         const boton = document.getElementById(`btn-state-${estado}`);
@@ -1051,6 +1051,6 @@ function iniciarResultado() {
     });
     const botonContinuar = document.querySelector('.resultado-botones .btn-primary');
     botonContinuar.href = resultado && Number.isInteger(resultado.aciertos)
-        ? `recomendaciones.html?aciertos=${resultado.aciertos}`
-        : 'recomendaciones.html';
+        ? `/recomendaciones?aciertos=${resultado.aciertos}`
+        : '/recomendaciones';
 }

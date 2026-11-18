@@ -42,7 +42,14 @@
                     <a class="nav-link active" href="{{ url('/dashboard') }}"><i class="bi bi-speedometer2 me-1"></i> Panel del Usuario</a>
                     <a class="nav-link" href="{{ url('/ruta-aprendizaje') }}"><i class="bi bi-journal-bookmark me-1"></i> Ruta de Aprendizaje</a>
                     <a class="nav-link" href="{{ url('/resultados-leccion') }}"><i class="bi bi-bar-chart-line me-1"></i> Resultados</a>
-                    <a class="nav-link" href="{{ url('/glosario') }}"><i class="bi bi-book me-1"></i> Glosario</a>
+                              <a class="nav-link" href="{{ url('/glosario') }}"><i class="bi bi-book me-1"></i> Glosario</a>
+          <a class="nav-link" href="{{ url('/perfil') }}"><i class="bi bi-person me-1"></i> Mi perfil</a>
+
+          <form action="{{ route('logout') }}" method="POST" class="ms-lg-3">
+              @csrf
+              <button type="submit" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+          </form>
+      </div>
                 </div>
             </div>
         </div>

@@ -12,12 +12,17 @@ class PerfilController extends Controller
         $datos = $request->validate([
             'nombre' => ['required', 'string', 'min:2', 'max:255'],
             'apellido' => ['required', 'string', 'max:255'],
+            'area_profesional' => [
+                'required',
+                'in:Sistemas y Desarrollo,Medicina,Gastronomía,Derecho,Arquitectura'
+            ],
         ]);
 
         $usuario = Auth::user();
 
         $usuario->name = $datos['nombre'];
         $usuario->apellido = $datos['apellido'];
+        $usuario->area_profesional = $datos['area_profesional'];
 
         $usuario->save();
 
