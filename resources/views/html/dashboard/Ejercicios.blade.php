@@ -47,6 +47,7 @@
                     <a href="{{ url('/ejercicios') }}" class="nav-link nav-link-app active">Practicar</a>
                     <a href="{{ url('/glosario') }}" class="nav-link nav-link-app">Glosario</a>
                     <a href="{{ url('/dashboard') }}" class="nav-link nav-link-app">Dashboard</a>
+                    <a href="{{ route('gestion.ejercicios.index') }}" class="nav-link nav-link-app">Gestionar ejercicios</a>
                 </div>
 
                 <div class="d-flex align-items-center gap-3">

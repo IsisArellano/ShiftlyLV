@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EjercicioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,3 +153,14 @@ Route::get('/ruta-arquitectura', function () {
 Route::get('/ruta-general', function () {
     return view('html.dashboard.ruta-general');
 })->name('ruta-general');
+Route::resource('gestion/ejercicios', EjercicioController::class)
+    ->except('show')
+    ->parameters(['gestion/ejercicios' => 'ejercicio'])
+    ->names([
+        'index' => 'gestion.ejercicios.index',
+        'create' => 'gestion.ejercicios.create',
+        'store' => 'gestion.ejercicios.store',
+        'edit' => 'gestion.ejercicios.edit',
+        'update' => 'gestion.ejercicios.update',
+        'destroy' => 'gestion.ejercicios.destroy',
+    ]);
