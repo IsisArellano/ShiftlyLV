@@ -87,21 +87,32 @@
 
             <!-- Contenedor para Mensajes Dinámicos -->
             <div id="mensajeVerificacion" class="alert d-none text-start mb-3 rounded-4 py-2 px-3 small fw-bold" role="alert"></div>
-
+@include('partials.alertas')
             <!-- Formulario de Verificación (Redirige a /new-password) -->
             <form id="formularioVerificacion" data-redirect="{{ url('/new-password') }}" novalidate>
+                <label class="form-label small fw-extrabold d-block mb-2" style="color: var(--purple-dark);">
+                    Código de Verificación <span class="text-danger">*</span>
+                </label>
+
                 <!-- Inputs del Código de 4 Dígitos -->
                 <div class="d-flex justify-content-center gap-2 gap-sm-3 mb-4" id="grupoInputsOtp">
-                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d" aria-label="Primer dígito" autocomplete="one-time-code">
-                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d" aria-label="Segundo dígito">
-                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d" aria-label="Tercer dígito">
-                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d" aria-label="Cuarto dígito">
+                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d @error('codigo') is-invalid @enderror" aria-label="Primer dígito" autocomplete="one-time-code" required>
+                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d @error('codigo') is-invalid @enderror" aria-label="Segundo dígito" required>
+                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d @error('codigo') is-invalid @enderror" aria-label="Tercer dígito" required>
+                    <input type="text" inputmode="numeric" maxlength="1" class="form-control codigo otp-input-3d @error('codigo') is-invalid @enderror" aria-label="Cuarto dígito" required>
                 </div>
+                @error('codigo')
+                    <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                @enderror
 
                 <button type="submit" id="btnVerificar" class="btn btn-3d-orange w-100 py-3 fs-6">
                     <span>Verificar Cuenta</span>
                     <i class="bi bi-check2-circle fs-5"></i>
                 </button>
+
+                <a href="{{ url('/recuperar-password') }}" class="btn btn-outline-secondary w-100 mt-2 py-2 rounded-4 fw-bold">
+                    Cancelar / Volver
+                </a>
             </form>
 
             <!-- Reenviar Código con Temporizador Interactivo -->

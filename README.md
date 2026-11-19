@@ -11,7 +11,7 @@
     - **Isis Dayane Arellano Carrillo** — *Frontend*
     - **Brian Jael Juárez Rodrigues** — *Frontend*
     - **Julio Cesar Licona Hernandez** — *Backend*
-    - **Vanesa Lugo Ramírez** — *Backend*
+    - **Vaneza Lugo Ramírez** — *Backend*
 
     ---
 
@@ -201,3 +201,12 @@
 
     # ShiftlyLV
     Shiftly es una app web gamificada de inglés profesional que prepara a trabajadores para laborar en el extranjero. Enseña vocabulario técnico, jerga laboral e modismos corporativos complejos mediante lecciones interactivas, ayudando a los usuarios a comunicarse con total confianza y evitar malentendidos en su día a día.
+
+VANEZA:
+Interfaz de Usuario y Retroalimentación (`feature/interfaz-usuario-retroalimentacion`)
+
+- Estandarización de formularios Blade con etiquetas accesibles (`<label for>`), tipos de entrada adecuados e indicadores de campos obligatorios (`*`).
+- Retroalimentación de validación por campo mediante `@error('campo')` y clases `is-invalid` de Bootstrap.
+- Persistencia de datos en formularios con `old()` tras errores de validación.
+- Implementación de alertas globales (`resources/views/partials/alertas.blade.php`) para mensajes de sesión (`success` y `error`).
+- Incorporación de botones de navegación **Cancelar / Volver** y revisión responsiva en vistas móviles (`375 px`).
