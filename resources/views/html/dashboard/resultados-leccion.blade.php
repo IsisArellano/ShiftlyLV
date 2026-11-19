@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/resultados-leccion.css') }}">
 </head>
 
-<body>
+<body data-url-base="{{ url('/') }}">
 
     <!-- NAVBAR CORPORATIVO -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 sticky-top">
@@ -65,53 +65,20 @@
 
                     <!-- CADA PUNTUACTION GENERAL -->
                     <div class="score-display mb-4">
-                        <span class="score-number" id="contadorPuntaje">85</span>
+                        <span class="score-number" id="contadorPuntaje">0</span>
                         <span class="fs-4 text-muted font-monospace"> / 100</span>
                     </div>
                     
-                    <p class="small text-muted mb-4">Haz clic en cada botón para desplegar los detalles de aciertos y tiempo empleado en cada lección.</p>
+                    <p class="small text-muted mb-4" id="textoResumenResultados">Porcentaje de retos resueltos a la primera en todas tus rutas.</p>
 
-                    <!-- LISTADO DE BOTONES CON ÍCONOS Y ESTILOS DE MARCA -->
-                    <div class="d-grid gap-3">
-                        <button class="btn btn-modulo-detalle destacado btn-detalle" data-modulo="Medicina" data-aciertos="9/10" data-tiempo="12 minutos">
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="rounded-circle icon-area d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--orange-light); color: var(--orange-bright);">
-                                    <i class="bi bi-hospital"></i>
-                                </span>
-                                Detalle Medicina
-                            </span>
-                            <i class="bi bi-chevron-right small"></i>
-                        </button>
+                    <!-- resultados-leccion.js crea un botón por cada ruta con práctica registrada -->
+                    <div class="d-grid gap-3" id="listaResultados"></div>
 
-                        <button class="btn btn-modulo-detalle btn-detalle" data-modulo="Gastronomía" data-aciertos="10/10" data-tiempo="8 minutos">
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="rounded-circle icon-area d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--purple-soft); color: var(--purple-main);">
-                                    <i class="bi bi-cup-hot"></i>
-                                </span>
-                                Detalle Gastronomía
-                            </span>
-                            <i class="bi bi-chevron-right small"></i>
-                        </button>
-
-                        <button class="btn btn-modulo-detalle btn-detalle" data-modulo="Derecho" data-aciertos="8/10" data-tiempo="15 minutos">
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="rounded-circle icon-area d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--purple-soft); color: var(--purple-main);">
-                                    <i class="bi bi-briefcase"></i>
-                                </span>
-                                Detalle Derecho
-                            </span>
-                            <i class="bi bi-chevron-right small"></i>
-                        </button>
-
-                        <button class="btn btn-modulo-detalle btn-detalle" data-modulo="Arquitectura" data-aciertos="9/10" data-tiempo="10 minutos">
-                            <span class="d-flex align-items-center gap-2">
-                                <span class="rounded-circle icon-area d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: var(--purple-soft); color: var(--purple-main);">
-                                    <i class="bi bi-building"></i>
-                                </span>
-                                Detalle Arquitectura
-                            </span>
-                            <i class="bi bi-chevron-right small"></i>
-                        </button>
+                    <div class="d-none" id="sinResultados">
+                        <p class="text-muted small mb-3">Todavía no tienes lecciones practicadas. Completa una ronda de ejercicios para ver aquí tus resultados.</p>
+                        <a href="{{ url('/ruta-aprendizaje') }}" class="btn btn-modulo-detalle destacado justify-content-center">
+                            <span><i class="bi bi-play-fill me-1"></i> Elegir una ruta</span>
+                        </a>
                     </div>
 
                 </div>
@@ -132,7 +99,7 @@
                 </div>
                 <div class="modal-body p-4 text-start">
                     <div class="modal-info-box mb-3 d-flex align-items-center justify-content-between">
-                        <span class="fw-semibold text-muted"><i class="bi bi-check2-square me-2 text-success"></i>Aciertos Obtenidos:</span>
+                        <span class="fw-semibold text-muted"><i class="bi bi-check2-square me-2 text-success"></i>Aciertos a la primera:</span>
                         <span class="fw-bold fs-5" id="modalAciertos" style="color: var(--purple-dark);">--</span>
                     </div>
 
@@ -140,6 +107,11 @@
                         <span class="fw-semibold text-muted"><i class="bi bi-clock-history me-2 text-primary"></i>Tiempo Empleado:</span>
                         <span class="fw-bold fs-5" id="modalTiempo" style="color: var(--purple-dark);">--</span>
                     </div>
+                    <div class="modal-info-box mt-3 d-flex align-items-center justify-content-between">
+                        <span class="fw-semibold text-muted"><i class="bi bi-journal-check me-2" style="color: var(--orange-bright);"></i>Lecciones completadas:</span>
+                        <span class="fw-bold fs-5" id="modalLecciones" style="color: var(--purple-dark);">--</span>
+                    </div>
+                    <div class="mt-3 d-flex flex-column gap-2 small" id="modalDetalleLecciones"></div>
                 </div>
                 <div class="modal-footer border-0 px-4 pb-4">
                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
@@ -159,7 +131,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script JS para la interactividad -->
-    <script src="{{ asset('js/resultados-leccion.js') }}"></script>
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/resultados-leccion.js') }}?v=2"></script>
 </body>
 
 </html>

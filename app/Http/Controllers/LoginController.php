@@ -20,10 +20,7 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('/perfil')->with(
-                'success',
-                '¡Bienvenido de nuevo!'
-            );
+           return redirect('/dashboard')->with('success', '¡Bienvenido de nuevo!');
         }
 
         // Si los datos son incorrectos

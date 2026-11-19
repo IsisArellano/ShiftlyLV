@@ -715,14 +715,9 @@ const bancosPorCarrera = {
     ]
 };
 
+// Usa la voz femenina global (voz-femenina.js): OpenAI "nova" o la mejor voz del navegador
 function speakQuestion(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
-        u.rate = 0.92;
-        window.speechSynthesis.speak(u);
-    }
+    if (window.reproducirAudioIngles) window.reproducirAudioIngles(text);
 }
 
 function iniciarDiagnosticoCompleto() {
@@ -911,77 +906,161 @@ function iniciarDiagnosticoCompleto() {
         if (indice < preguntasActivas.length - 1) {
             indice++;
             renderizarPregunta();
-        } else {
-            finalizarYCalcularResultados(false);
+            tarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
         }
-    });
-
-    // ==========================================
-    // CÁLCULO DE NIVEL CEFR Y PANTALLA FINAL
-    // ==========================================
-    function finalizarYCalcularResultados(porTiempoOSalida) {
-        desactivarModoBloqueo();
-        modalSalida.hide();
-
-        let aciertos = 0;
-        const revision = preguntasActivas.map((q, idx) => {
-            const elegidaIdx = respuestas[idx];
-            const esCorrecta = elegidaIdx === q.correcta;
-            if (esCorrecta) aciertos++;
-
-            return {
-                pregunta: q.texto,
-                respuestaElegida: elegidaIdx !== null ? q.opciones[elegidaIdx] : 'Sin responder',
-                respuestaCorrecta: q.opciones[q.correcta],
-                explicacion: q.explicacion,
-                correcta: esCorrecta
-            };
-        });
-
-        let indiceNivel = 0;
-        if (aciertos >= 9) indiceNivel = 4;      // C1
-        else if (aciertos >= 7) indiceNivel = 3; // B2
-        else if (aciertos >= 5) indiceNivel = 2; // B1
-        else if (aciertos >= 3) indiceNivel = 1; // A2
-        else indiceNivel = 0;                    // A1
-
-        const infoNivel = nivelesDiagnostico[indiceNivel];
-        const resultado = {
-            ...infoNivel,
-            aciertos,
-            total: preguntasActivas.length,
-            carrera: carreraElegida,
-            revision
-        };
-
+        const aciertos = respuestas.reduce((total, respuesta, posicion) => total + (respuesta === preguntas[posicion].correcta ? 1 : 0), 0);
+        const revision = preguntas.map((pregunta, posicion) => ({
+            pregunta: pregunta.texto,
+            respuestaElegida: pregunta.opciones[respuestas[posicion]],
+            respuestaCorrecta: pregunta.opciones[pregunta.correcta],
+            correcta: respuestas[posicion] === pregunta.correcta
+        }));
+        const resultado = { ...nivelesDiagnostico[Math.min(aciertos, nivelesDiagnostico.length - 1)], aciertos, total: preguntas.length, revision };
         try {
             localStorage.setItem('shiftlyDiagnosticoResultado', JSON.stringify(resultado));
-        } catch (_) {}
+        } catch (_) {
 
-        pantallaExamen.classList.add('d-none');
-        pantallaResultados.classList.remove('d-none');
+        }
+        window.location.href = `/resultado?aciertos=${aciertos}`;
+    });
+    renderizarPregunta();
+}
 
-        document.getElementById('resultado-nivel-codigo').textContent = infoNivel.nivel;
-        document.getElementById('resultado-nivel-nombre').textContent = infoNivel.nombre;
-        document.getElementById('resultado-puntaje-texto').textContent =
-            `Obtuviste ${aciertos} de ${preguntasActivas.length} aciertos (${aciertos * 10}%) · Área: ${carreraElegida}${porTiempoOSalida ? ' · Examen cerrado automáticamente' : ''}`;
-        document.getElementById('resultado-descripcion').textContent = infoNivel.descripcion;
-        document.getElementById('resultado-carrera').textContent = carreraElegida;
-        document.getElementById('resultado-recomendacion').textContent =
-            `${infoNivel.recomendacion} Te recomendamos iniciar con el glosario y ejercicios especializados de ${carreraElegida}.`;
+/* recomendaciones */
+function iniciarRecomendaciones() {
+    const buscador = document.getElementById('buscar-modulo');
+    if (!buscador) return;
 
-        const listaRevision = document.getElementById('lista-revision');
+    function cambiarEstado(estado) {
+        const estados = ['active', 'completed', 'empty'];
+        estados.forEach((nombre) => {
+            document.getElementById(`card-${nombre}-state`).classList.toggle('d-none', nombre !== estado);
+            const boton = document.getElementById(`btn-state-${nombre}`);
+            boton.classList.toggle('active', nombre === estado);
+            boton.setAttribute('aria-pressed', String(nombre === estado));
+        });
+        const mensajes = {
+            active: 'Se muestra tu recomendación activa.',
+            completed: 'Se muestran tus rutas completadas.',
+            empty: 'Se muestran las opciones para elegir una ruta.'
+        };
+        document.getElementById('mensaje-notificacion').textContent = mensajes[estado] || 'Vista actualizada.';
+        bootstrap.Toast.getOrCreateInstance(document.getElementById('notificacion-estado')).show();
+    }
+
+    let resultado = null;
+    try {
+        resultado = JSON.parse(localStorage.getItem('shiftlyDiagnosticoResultado') || 'null');
+    } catch (_) {
+
+    }
+    if (!resultado) {
+        const parametroAciertos = new URLSearchParams(window.location.search).get('aciertos');
+        const aciertos = parametroAciertos === null ? NaN : Number(parametroAciertos);
+        if (Number.isInteger(aciertos) && aciertos >= 0 && aciertos <= 5) {
+            const indiceNivel = Math.min(aciertos, nivelesDiagnostico.length - 1);
+            resultado = { nivel: nivelesDiagnostico[indiceNivel].nivel, nombre: nivelesDiagnostico[indiceNivel].nombre };
+        }
+    }
+    if (resultado && resultado.nivel) {
+        const etiquetaNivel = document.querySelector('#card-active-state .badge.bg-brand-accent.bg-opacity-50');
+        if (etiquetaNivel) etiquetaNivel.textContent = resultado.nombre || resultado.nivel;
+        const textoRazon = document.querySelector('#card-active-state .rounded-3.bg-white.bg-opacity-50 .mt-1');
+        if (textoRazon) textoRazon.textContent = `Tu diagnóstico indica un nivel ${resultado.nivel} (${resultado.nombre}). Esta lección te ayudará a seguir avanzando desde tu nivel actual.`;
+    }
+    const botonComenzar = document.querySelector('#card-active-state a[href="#start-lesson"]');
+    if (botonComenzar) botonComenzar.href = '/ruta-aprendizaje';
+
+    ['active', 'completed', 'empty'].forEach((estado) => {
+        const boton = document.getElementById(`btn-state-${estado}`);
+        boton.setAttribute('aria-controls', `card-${estado}-state`);
+        boton.addEventListener('click', () => cambiarEstado(estado));
+    });
+
+    const modulos = [...document.querySelectorAll('.module-item')];
+    buscador.addEventListener('input', () => {
+        const consulta = buscador.value.trim().toLocaleLowerCase('es');
+        let visibles = 0;
+        modulos.forEach((modulo) => {
+            const coincide = modulo.dataset.search.toLocaleLowerCase('es').includes(consulta);
+            modulo.classList.toggle('d-none', !coincide);
+            if (coincide) visibles += 1;
+        });
+        document.getElementById('sin-resultados-modulo').classList.toggle('d-none', visibles > 0);
+    });
+}
+
+
+/* resultados */
+function iniciarResultado() {
+    const nivelElemento = document.getElementById('nivel-resultado');
+    if (!nivelElemento) return;
+
+    let resultado = null;
+
+    try {
+        resultado = JSON.parse(
+            localStorage.getItem('shiftlyDiagnosticoResultado') || 'null'
+        );
+    } catch (_) {
+        resultado = null;
+    }
+
+    const parametroAciertos = new URLSearchParams(window.location.search)
+        .get('aciertos');
+
+    const aciertosUrl = parametroAciertos === null
+        ? NaN
+        : Number(parametroAciertos);
+
+    if (
+        !resultado &&
+        Number.isInteger(aciertosUrl) &&
+        aciertosUrl >= 0 &&
+        aciertosUrl <= 5
+    ) {
+        resultado = {
+            ...nivelesDiagnostico[
+                Math.min(aciertosUrl, nivelesDiagnostico.length - 1)
+            ],
+            aciertos: aciertosUrl,
+            total: 5,
+            revision: []
+        };
+    }
+
+    if (resultado && nivelesDiagnostico.some(
+        (nivel) => nivel.nivel === resultado.nivel
+    )) {
+        nivelElemento.textContent = resultado.nivel;
+        document.getElementById('nombre-nivel').textContent = resultado.nombre;
+        document.getElementById('descripcion-nivel').textContent = resultado.descripcion;
+        document.getElementById('texto-recomendacion').textContent = resultado.recomendacion;
+    }
+
+    const listaRevision = document.getElementById('lista-revision');
+
+    if (listaRevision) {
         listaRevision.innerHTML = '';
+
+        const revision = Array.isArray(resultado?.revision)
+            ? resultado.revision
+            : [];
 
         revision.forEach((item, i) => {
             const div = document.createElement('div');
             div.className = 'p-3 rounded-4';
             div.style.backgroundColor = item.correcta ? '#F0FDF4' : '#FEF2F2';
-            div.style.border = item.correcta ? '2px solid #86EFAC' : '2px solid #FECACA';
+            div.style.border = item.correcta
+                ? '2px solid #86EFAC'
+                : '2px solid #FECACA';
 
             div.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
-                    <strong class="small" style="color: var(--purple-dark);">Pregunta ${i + 1}: ${item.pregunta}</strong>
+                    <strong class="small" style="color: var(--purple-dark);">
+                        Pregunta ${i + 1}: ${item.pregunta}
+                    </strong>
                     <span class="badge rounded-pill ${item.correcta ? 'bg-success' : 'bg-danger'}">
                         ${item.correcta ? 'Correcta' : 'Incorrecta'}
                     </span>
@@ -990,23 +1069,38 @@ function iniciarDiagnosticoCompleto() {
                     <strong>Tu respuesta:</strong> ${item.respuestaElegida}
                     ${!item.correcta ? ` · <strong class="text-success">Correcta:</strong> ${item.respuestaCorrecta}` : ''}
                 </div>
-                <div class="small text-muted"><i class="bi bi-info-circle-fill me-1"></i>${item.explicacion}</div>
+                <div class="small text-muted">
+                    <i class="bi bi-info-circle-fill me-1"></i>${item.explicacion}
+                </div>
             `;
+
             listaRevision.appendChild(div);
         });
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Iniciar examen con el banco de la carrera elegida
-    btnIniciar.addEventListener('click', () => {
-        preguntasActivas = bancosPorCarrera[carreraElegida] || bancosPorCarrera['General'];
-        respuestas = Array(preguntasActivas.length).fill(null);
-        indice = 0;
+    const botonVolver = document.querySelector(
+        '.resultado-botones .btn-outline-secondary'
+    );
 
-        pantallaInicio.classList.add('d-none');
-        pantallaExamen.classList.remove('d-none');
-        activarModoBloqueo();
-        renderizarPregunta();
-    });
+    if (botonVolver) {
+        botonVolver.addEventListener('click', () => {
+            try {
+                localStorage.removeItem('shiftlyDiagnosticoResultado');
+            } catch (_) {
+                // No se pudo limpiar el almacenamiento.
+            }
+        });
+    }
+
+    const botonContinuar = document.querySelector(
+        '.resultado-botones .btn-primary'
+    );
+
+    if (botonContinuar) {
+        botonContinuar.href = resultado && Number.isInteger(resultado.aciertos)
+            ? `/recomendaciones?aciertos=${resultado.aciertos}`
+            : '/recomendaciones';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }

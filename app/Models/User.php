@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+ feature/crud-postgresql
 #[Fillable(['name', 'apellido', 'carrera', 'email', 'password'])]
+
+#[Fillable(['name', 'apellido', 'email', 'password', 'area_profesional'])]
+ main
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {

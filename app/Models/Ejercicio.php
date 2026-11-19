@@ -9,10 +9,13 @@ class Ejercicio extends Model
 {
     protected $fillable = [
         'leccion_id',
+        'titulo',
         'tipo',
         'pregunta',
         'opciones',
         'respuesta',
+        'respuesta_correcta',
+        'retroalimentacion',
     ];
 
     protected function casts(): array

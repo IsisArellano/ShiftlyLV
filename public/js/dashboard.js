@@ -8,48 +8,56 @@ document.addEventListener('DOMContentLoaded', function () {
     const displayUsername = document.getElementById('displayUsername');
     const displayEmail = document.getElementById('displayEmail');
 
-    // Toast (si existe en tu HTML) y Modal emergente
     const toastElemento = document.getElementById('toastNotificacion');
     const toastBootstrap = toastElemento && typeof bootstrap !== 'undefined' ? new bootstrap.Toast(toastElemento) : null;
 
-    const STORAGE_KEY = 'shiftly_user_profile';
+    const STORAGE_KEY = 'shiftly_user_profile_full';
+    const SESSION_KEY = 'shiftly_usuario_activo';
 
-    // --- 1. LEER (READ): Cargar datos desde localStorage al iniciar ---
+    function leerJSON(clave) {
+        try {
+            return JSON.parse(localStorage.getItem(clave) || 'null');
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function mostrarPerfil(nombre, correo) {
+        if (inputNombre) inputNombre.value = nombre;
+        if (inputCorreo) inputCorreo.value = correo;
+        if (displayUsername) displayUsername.textContent = nombre || 'Usuario';
+        if (displayEmail) displayEmail.textContent = correo || 'ejemplo@correo.com';
+    }
+
     function cargarDatosPerfil() {
-        const datosGuardados = localStorage.getItem(STORAGE_KEY);
+        const perfil = leerJSON(STORAGE_KEY);
+        const sesion = leerJSON(SESSION_KEY);
 
-        if (datosGuardados) {
-            const perfil = JSON.parse(datosGuardados);
-            if (inputNombre) inputNombre.value = perfil.username || '';
-            if (inputCorreo) inputCorreo.value = perfil.email || '';
-
-            if (displayUsername) displayUsername.textContent = perfil.username || 'Usuario';
-            if (displayEmail) displayEmail.textContent = perfil.email || 'ejemplo@correo.com';
+        if (perfil) {
+            const nombreCompleto = [perfil.nombre, perfil.apellido].filter(Boolean).join(' ');
+            mostrarPerfil(nombreCompleto, perfil.email || '');
+        } else if (sesion) {
+            mostrarPerfil(sesion.nombre || '', sesion.email || '');
         } else {
-            // Valores demostrativos por defecto
-            if (inputNombre) inputNombre.value = 'Usuario Demo';
-            if (inputCorreo) inputCorreo.value = 'usuario@shiftly.com';
-
-            if (displayUsername) displayUsername.textContent = 'Usuario Demo';
-            if (displayEmail) displayEmail.textContent = 'usuario@shiftly.com';
+            mostrarPerfil('Usuario Demo', 'usuario@shiftly.com');
         }
     }
 
     cargarDatosPerfil();
 
-    // --- FUNCIONES DE VALIDACIÓN ORIGINALES ---
     function validarNombre() {
         if (!inputNombre) return false;
         const valor = inputNombre.value.trim();
+
         if (valor.length >= 3) {
             inputNombre.classList.remove('is-invalid');
             inputNombre.classList.add('is-valid');
             return true;
-        } else {
-            inputNombre.classList.remove('is-valid');
-            inputNombre.classList.add('is-invalid');
-            return false;
         }
+
+        inputNombre.classList.remove('is-valid');
+        inputNombre.classList.add('is-invalid');
+        return false;
     }
 
     function validarCorreo() {
@@ -61,14 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
             inputCorreo.classList.remove('is-invalid');
             inputCorreo.classList.add('is-valid');
             return true;
-        } else {
-            inputCorreo.classList.remove('is-valid');
-            inputCorreo.classList.add('is-invalid');
-            return false;
         }
+
+        inputCorreo.classList.remove('is-valid');
+        inputCorreo.classList.add('is-invalid');
+        return false;
     }
 
-    // --- 2. CREAR / ACTUALIZAR (CREATE / UPDATE): Guardar y notificar ---
     function manejarEnvioFormulario(evento) {
         evento.preventDefault();
 
@@ -79,26 +86,26 @@ document.addEventListener('DOMContentLoaded', function () {
             const usernameVal = inputNombre.value.trim();
             const emailVal = inputCorreo.value.trim();
 
-            // Guardar en localStorage
+            const partes = usernameVal.split(/\s+/);
             const perfilActualizado = {
-                username: usernameVal,
+                ...(leerJSON(STORAGE_KEY) || {}),
+                nombre: partes[0],
+                apellido: partes.slice(1).join(' '),
                 email: emailVal,
                 updatedAt: new Date().toISOString()
             };
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(perfilActualizado));
 
-            // Actualizar vista previa dinámica
             if (displayUsername) displayUsername.textContent = usernameVal;
             if (displayEmail) displayEmail.textContent = emailVal;
 
-            // Mostrar Toast si existe
             if (toastBootstrap) {
                 toastBootstrap.show();
             }
 
-            // Desplegar Modal emergente "Los cambios se guardaron correctamente"
             const modalElement = document.getElementById('modalCambiosGuardados');
+
             if (modalElement && typeof bootstrap !== 'undefined') {
                 const modalExito = new bootstrap.Modal(modalElement);
                 modalExito.show();
@@ -106,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- 3. ELIMINAR (DELETE): Limpiar perfil ---
     if (btnEliminar) {
         btnEliminar.addEventListener('click', function () {
             if (confirm('¿Estás seguro de que deseas eliminar la información de tu perfil local?')) {
@@ -116,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputNombre.value = '';
                     inputNombre.classList.remove('is-valid', 'is-invalid');
                 }
+
                 if (inputCorreo) {
                     inputCorreo.value = '';
                     inputCorreo.classList.remove('is-valid', 'is-invalid');
@@ -127,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // EVENT LISTENERS DE VALIDACIÓN E INTERACCIÓN
     if (inputNombre) {
         inputNombre.addEventListener('input', validarNombre);
         inputNombre.addEventListener('blur', validarNombre);

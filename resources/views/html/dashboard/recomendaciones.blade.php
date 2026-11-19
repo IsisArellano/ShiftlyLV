@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shiftly - Prototipo de Panel y Lección Recomendada</title>
+    <title>Shiftly - Lección Recomendada</title>
 
-    <!-- Bootstrap 5.3 CSS -->
+    <!-- Bootstrap 5.3 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
@@ -18,6 +19,7 @@
             --brand-bg: #DAE0F2;
             --brand-surface: #EFE9E7;
             --brand-accent: #EDD0EC;
+            --brand-orange: #FF6B35;
         }
 
         body {
@@ -39,44 +41,18 @@
         .text-brand-accent { color: var(--brand-accent) !important; }
         .border-brand-accent { border-color: var(--brand-accent) !important; }
 
-        /* Estilos específicos de componentes */
-        .prototype-banner {
-            background-color: var(--brand-accent);
-            color: var(--brand-primary);
-            font-size: 0.85rem;
+        .nav-link-rec {
+            color: #6c757d;
+            text-decoration: none;
+            padding: 1rem 0;
+            border-bottom: 3px solid transparent;
         }
 
-        .state-controller {
-            background-color: var(--brand-primary);
-            border-radius: 1rem;
-        }
-
-        .state-tabs-container {
-            background-color: rgba(17, 19, 68, 0.6);
-            border: 1px solid rgba(237, 208, 236, 0.3);
-            border-radius: 0.75rem;
-            padding: 4px;
-        }
-
-        .tab-btn {
-            border: none;
-            background: transparent;
-            color: #cbd5e1;
-            font-size: 0.8rem;
-            padding: 6px 12px;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .tab-btn:hover {
-            color: var(--brand-accent);
-        }
-
-        .tab-btn.active {
-            background-color: var(--brand-secondary);
-            color: #ffffff;
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .nav-link-rec:hover,
+        .nav-link-rec.active {
+            color: var(--brand-secondary);
+            border-bottom-color: var(--brand-secondary);
+            font-weight: 700;
         }
 
         .card-custom {
@@ -96,6 +72,29 @@
             background-color: var(--brand-secondary);
         }
 
+        .selector-carrera {
+            border: 1px solid var(--brand-accent);
+            border-radius: 0.75rem;
+            font-weight: 600;
+            color: var(--brand-primary);
+            background-color: var(--brand-surface);
+        }
+
+        .estado-modulo {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .module-item.actual {
+            border-color: var(--brand-secondary) !important;
+            box-shadow: 0 0 0 2px rgba(82, 21, 78, 0.15);
+        }
+
+        .module-item.bloqueado {
+            opacity: 0.6;
+        }
+
         /* Animación de pulso */
         @keyframes subtle-pulse {
             0%, 100% { opacity: 1; }
@@ -104,250 +103,207 @@
         .animate-pulse-subtle {
             animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animate-pulse-subtle { animation: none; }
+        }
     </style>
 </head>
-<body>
-
-    <!-- PROTOTYPE NOTICE BANNER -->
-    <div class="prototype-banner text-center py-2 px-3 fw-medium border-bottom shadow-sm">
-        <span class="badge bg-brand-secondary text-white text-uppercase me-2">Prototipo Visual</span>
-        <span>Este componente es una maqueta estática diseñada para la iteración de interfaz de <strong>Shiftly</strong>.</span>
-    </div>
+<body data-url-base="{{ url('/') }}">
 
     <!-- HEADER / NAVIGATION -->
     <header class="bg-brand-surface border-bottom sticky-top shadow-sm">
-        <div class="container-xl d-flex align-items-center justify-content-between" style="height: 64px;">
+        <div class="container-xl d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-4">
-                <!-- Shiftly Logo -->
-                <div class="d-flex align-items-center gap-2 fw-bold fs-5 text-brand-primary cursor-pointer">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6AMKDA4XN56S8QAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmXRbwAADWhJREFUeNrtm3uMVVcex3/n3Od93IeD8hh5YwSREbS8FBwrtSptR6N1XbXVbXWbbrfptm7T7TbdbtNtut2m22227TbdbrdpbWurrqOttrZd67pWR4eZ4TnMvId5w4fMDDPDDDPDNHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHPHP" width="36" height="36" alt="Shiftly Logo">
+                <a href="{{ url('/') }}" class="d-flex align-items-center gap-2 fw-bold fs-5 text-brand-primary text-decoration-none py-2">
+                    <img src="{{ asset('img/logotipo interfaz.svg') }}" width="36" height="36" alt="Logo Shiftly">
                     <span>Shiftly</span>
-                </div>
-                <!-- Nav Links -->
-                <nav class="d-none d-md-flex gap-4 fs-6 fw-medium">
-                    <a href="#" class="text-brand-secondary text-decoration-none fw-bold border-bottom border-3 border-brand-secondary py-3">Dashboard</a>
-                    <a href="#" class="text-secondary text-decoration-none py-3">Mis Cursos</a>
-                    <a href="#" class="text-secondary text-decoration-none py-3">Rutas de Aprendizaje</a>
-                    <a href="#" class="text-secondary text-decoration-none py-3">Reportes</a>
+                </a>
+                <nav class="d-none d-md-flex gap-4 fs-6 fw-medium" aria-label="Navegación principal">
+                    <a href="{{ url('/dashboard') }}" class="nav-link-rec">Dashboard</a>
+                    <a href="{{ url('/recomendaciones') }}" class="nav-link-rec active" aria-current="page">Recomendaciones</a>
+                    <a href="{{ url('/ruta-aprendizaje') }}" class="nav-link-rec">Rutas de Aprendizaje</a>
+                    <a href="{{ url('/resultados-leccion') }}" class="nav-link-rec">Reportes</a>
                 </nav>
             </div>
-            
-            <!-- User Profile -->
-            <div class="d-flex align-items-center gap-3">
-                <button class="btn btn-sm btn-link text-secondary p-1 rounded-circle">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                </button>
-                <div class="d-flex align-items-center gap-2 ps-3 border-start">
-                    <div class="rounded-circle bg-brand-accent text-brand-primary d-flex align-items-center justify-center fw-bold border border-secondary border-opacity-25" style="width: 36px; height: 36px; font-size: 0.85rem;">
-                        CR
-                    </div>
-                    <div class="d-none d-sm-block text-start">
-                        <div class="fw-semibold text-brand-primary lh-1" style="font-size: 0.85rem;">Carlos Rodríguez</div>
-                        <small class="text-muted" style="font-size: 0.75rem;">Learner Account</small>
-                    </div>
+
+            <!-- Usuario activo -->
+            <a href="{{ url('/perfil') }}" class="d-flex align-items-center gap-2 py-2 text-decoration-none">
+                <div class="rounded-circle bg-brand-accent text-brand-primary d-flex align-items-center justify-content-center fw-bold border border-secondary border-opacity-25" style="width: 36px; height: 36px; font-size: 0.85rem;" id="inicialesUsuario">
+                    ?
                 </div>
-            </div>
+                <div class="d-none d-sm-block text-start">
+                    <div class="fw-semibold text-brand-primary lh-1" style="font-size: 0.85rem;" id="nombreUsuario">Invitado</div>
+                    <small class="text-muted" style="font-size: 0.75rem;" id="nivelUsuario">Learner Account</small>
+                </div>
+            </a>
         </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINER -->
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="container-xl py-4 flex-grow-1">
-        
-        <!-- PROTOTYPE STATE CONTROLLER TOOLBAR -->
-        <div class="state-controller p-3 p-md-4 text-white shadow mb-4">
-            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
-                <div>
-                    <h2 class="fs-6 fw-bold text-brand-accent d-flex align-items-center gap-2 m-0">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                        Control de Estados del Prototipo
-                    </h2>
-                    <p class="small text-white-50 m-0 mt-1" style="font-size: 0.8rem;">Selecciona un estado para probar el comportamiento de la tarjeta de recomendación:</p>
-                </div>
-                
-                <!-- State Selector Tabs -->
-                <div class="state-tabs-container d-inline-flex">
-                    <button id="btn-state-active" data-state="active" class="tab-btn active">
-                        1. Lección Disponible
-                    </button>
-                    <button id="btn-state-completed" data-state="completed" class="tab-btn">
-                        2. Todo Completado
-                    </button>
-                    <button id="btn-state-empty" data-state="empty" class="tab-btn">
-                        3. Sin Ruta Activa
-                    </button>
-                </div>
+
+        <!-- Selector de carrera -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+                <h1 class="h4 fw-bold text-brand-primary mb-1">Tu siguiente paso</h1>
+                <p class="small text-muted mb-0">Recomendaciones basadas en tu progreso real, tu diagnóstico y tus errores pendientes.</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <label for="selectorCarrera" class="small fw-semibold text-muted text-nowrap">Ver ruta:</label>
+                <select class="form-select form-select-sm selector-carrera" id="selectorCarrera"></select>
             </div>
         </div>
 
-        <!-- DASHBOARD GRID LAYOUT -->
         <div class="row g-4 align-items-start">
-            
-            <!-- LEFT / MAIN COLUMN -->
-            <div class="col-lg-8">
-                
-                <!-- ================= STATE 1: ACTIVE RECOMMENDATION CARD ================= -->
-                <section id="card-active-state" class="card-custom shadow-sm overflow-hidden mb-4">
-                    <div class="top-gradient-bar"></div>
 
+            <!-- COLUMNA PRINCIPAL -->
+            <div class="col-lg-8">
+
+                <!-- ESTADO 1: LECCIÓN RECOMENDADA -->
+                <section id="card-active-state" class="card-custom shadow-sm overflow-hidden mb-4 d-none">
+                    <div class="top-gradient-bar"></div>
                     <div class="p-4 p-sm-5">
-                        <!-- Header / Metadata Row -->
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                             <span class="badge rounded-pill bg-brand-accent text-brand-primary border border-secondary border-opacity-25 px-3 py-2 fw-semibold">
                                 <span class="d-inline-block rounded-circle bg-brand-secondary me-2 animate-pulse-subtle" style="width: 6px; height: 6px;"></span>
-                                Ruta: Shiftly Fundamentals
+                                Ruta: <span id="nombreRuta">—</span>
                             </span>
                             <div class="d-flex align-items-center gap-2 small text-muted">
-                                <span class="badge bg-white text-brand-primary border px-2 py-1 d-flex align-items-center gap-1">
-                                    <svg width="14" height="14" class="text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    15 min
+                                <span class="badge bg-white text-brand-primary border px-2 py-1">
+                                    <i class="bi bi-clock text-brand-secondary me-1"></i> ≈ 5 min
                                 </span>
-                                <span class="badge bg-brand-accent bg-opacity-50 text-brand-secondary border border-secondary border-opacity-25 px-2 py-1 d-flex align-items-center gap-1">
-                                    <span class="d-inline-block rounded-circle bg-brand-secondary" style="width: 6px; height: 6px;"></span>
-                                    Intermedio
-                                </span>
+                                <span class="badge bg-white text-brand-secondary border px-2 py-1" id="xpLeccion">+0 XP</span>
                             </div>
                         </div>
 
-                        <!-- Card Title & Context -->
                         <div class="mb-4">
                             <p class="text-uppercase fw-bold text-brand-secondary small mb-1" style="font-size: 0.75rem; letter-spacing: 0.05em;">Siguiente lección recomendada</p>
-                            <h1 class="h3 fw-bold text-brand-primary">
-                                Módulo 3: Configuración de Turnos y Horarios
-                            </h1>
-                            <p class="text-brand-primary text-opacity-75 small mt-2 leading-relaxed">
-                                Aprende a estructurar turnos rotativos, definir parámetros de descanso obligatorio y publicar calendarios sin traslapes operativos.
-                            </p>
+                            <h2 class="h3 fw-bold text-brand-primary" id="tituloRecomendado">—</h2>
+                            <p class="text-brand-primary text-opacity-75 small mt-2" id="descripcionRecomendada"></p>
                         </div>
 
-                        <!-- Recommendation Reason Box -->
                         <div class="p-3 rounded-3 bg-white bg-opacity-50 border border-brand-accent mb-4 d-flex align-items-start gap-3">
                             <div class="p-1 bg-brand-accent text-brand-primary rounded-2 flex-shrink-0 mt-1">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <i class="bi bi-info-circle"></i>
                             </div>
                             <div class="small text-brand-primary text-opacity-75">
                                 <strong class="text-brand-primary">¿Por qué esta lección?</strong>
-                                <div class="mt-1">Es el siguiente paso correlativo tras haber aprobado exitosamente <em>"Gestión de Usuarios y Roles"</em>.</div>
+                                <div class="mt-1" id="motivoRecomendacion"></div>
                             </div>
                         </div>
 
-                        <!-- CTA Actions Footer -->
                         <div class="pt-3 border-top border-brand-accent d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
-                            <div class="w-100 w-sm-auto text-center text-sm-start">
-                                <span class="small text-muted">Progreso de la Ruta: <strong class="text-brand-primary">45%</strong></span>
-                                <div class="progress mt-1" style="height: 8px; width: 100%; max-width: 150px;">
-                                    <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="w-100 text-center text-sm-start" style="max-width: 220px;">
+                                <span class="small text-muted">Progreso de la ruta: <strong class="text-brand-primary" id="porcentajeRuta">0%</strong></span>
+                                <div class="progress mt-1" style="height: 8px;">
+                                    <div class="progress-bar progress-bar-custom" role="progressbar" id="barraRuta" style="width: 0%;"></div>
                                 </div>
                             </div>
-                            <a href="#start-lesson" class="btn btn-lg bg-brand-secondary text-white w-100 w-sm-auto px-4 py-2 rounded-3 text-decoration-none shadow-sm fw-semibold fs-6">
-                                <span>Comenzar lección</span>
-                                <svg width="16" height="16" class="ms-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            <a href="{{ url('/ejercicios') }}" class="btn btn-lg bg-brand-secondary text-white px-4 py-2 rounded-3 shadow-sm fw-semibold fs-6" id="btnComenzarLeccion">
+                                Comenzar lección <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
                 </section>
 
-                <!-- ================= STATE 2: COMPLETED STATE CARD ================= -->
+                <!-- ESTADO 2: RUTA COMPLETADA -->
                 <section id="card-completed-state" class="card-custom shadow-sm p-4 p-sm-5 text-center d-none mb-4">
                     <div class="rounded-circle bg-brand-accent text-brand-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 64px; height: 64px;">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <i class="bi bi-trophy-fill fs-3"></i>
                     </div>
-                    <span class="badge rounded-pill bg-brand-accent text-brand-secondary border border-secondary border-opacity-25 px-3 py-2 fw-semibold mb-2">
-                        ¡Ruta Completada!
-                    </span>
-                    <h2 class="h4 fw-bold text-brand-primary mb-2">¡Estás al día con tus lecciones!</h2>
+                    <span class="badge rounded-pill bg-brand-accent text-brand-secondary border border-secondary border-opacity-25 px-3 py-2 fw-semibold mb-2">¡Ruta completada!</span>
+                    <h2 class="h4 fw-bold text-brand-primary mb-2">¡Dominaste <span id="rutaCompletadaNombre">esta ruta</span>!</h2>
                     <p class="text-brand-primary text-opacity-75 small mx-auto mb-4" style="max-width: 420px;">
-                        Has completado con éxito todos los módulos asignados en tu ruta activa. Gran trabajo manteniendo tus competencias al día en Shiftly.
+                        Completaste todas las lecciones. Repasa tus errores o empieza otra carrera para seguir sumando XP.
                     </p>
                     <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
-                        <button class="btn btn-outline-secondary text-brand-primary border-brand-accent fw-semibold">
-                            Repasar lecciones anteriores
-                        </button>
-                        <button class="btn bg-brand-secondary text-white fw-semibold">
-                            Explorar catálogo de cursos
-                        </button>
+                        <a href="{{ url('/ruta-aprendizaje') }}" class="btn btn-outline-secondary text-brand-primary border-brand-accent fw-semibold" id="btnRepasarRuta">
+                            Repasar la ruta
+                        </a>
+                        <a href="{{ url('/ruta-aprendizaje') }}" class="btn bg-brand-secondary text-white fw-semibold">
+                            Explorar otras rutas
+                        </a>
                     </div>
                 </section>
 
-                <!-- ================= STATE 3: EMPTY STATE CARD ================= -->
-                <section id="card-empty-state" class="card-custom shadow-sm border-dashed p-4 p-sm-5 text-center d-none mb-4">
+                <!-- ESTADO 3: SIN RUTA -->
+                <section id="card-empty-state" class="card-custom shadow-sm p-4 p-sm-5 text-center d-none mb-4" style="border-style: dashed;">
                     <div class="rounded-circle bg-white text-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 64px; height: 64px;">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <i class="bi bi-compass fs-3"></i>
                     </div>
                     <h2 class="h5 fw-bold text-brand-primary mb-1">Sin ruta de aprendizaje asignada</h2>
                     <p class="text-brand-primary text-opacity-75 small mx-auto mb-4" style="max-width: 380px;">
-                        Actualmente no tienes un plan de estudios activo. Selecciona una ruta para comenzar a recomendarte clases.
+                        Haz el examen diagnóstico para que te recomendemos una carrera y una lección inicial, o elige una ruta tú mismo.
                     </p>
-                    <button class="btn bg-brand-primary text-white fw-semibold px-4">
-                        Solicitar o Inscribir Ruta
-                    </button>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url('/diagnostico') }}" class="btn bg-brand-primary text-white fw-semibold px-4">Hacer diagnóstico</a>
+                        <a href="{{ url('/ruta-aprendizaje') }}" class="btn btn-outline-secondary text-brand-primary border-brand-accent fw-semibold">Elegir ruta</a>
+                    </div>
                 </section>
 
-                <!-- ADDITIONAL DASHBOARD SECTION -->
-                <div class="card-custom p-4 shadow-sm">
-                    <h3 class="fs-6 fw-bold text-brand-primary mb-3">Módulos Recientes de la Ruta</h3>
-                    <label for="buscar-modulo" class="form-label small mb-1">Buscar en tus módulos</label>
-                    <input type="search" class="form-control mb-3" id="buscar-modulo" placeholder="Escribe para filtrar..." aria-label="Buscar módulos recientes">
-                    <div class="d-flex flex-column gap-2" id="lista-modulos">
-                        <div class="module-item d-flex align-items-center justify-content-between p-3 rounded-3 bg-white bg-opacity-40 border border-brand-accent" data-search="introduccion plataforma">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="rounded-circle bg-brand-accent text-brand-secondary d-flex align-items-center justify-content-center fw-bold small" style="width: 28px; height: 28px;">✓</span>
-                                <div>
-                                    <p class="mb-0 fw-semibold text-brand-primary small">Módulo 1: Introducción a la Plataforma</p>
-                                    <span class="text-muted" style="font-size: 0.75rem;">Completado el 28 Sep • 10 min</span>
-                                </div>
-                            </div>
-                            <span class="small fw-medium text-muted">100%</span>
-                        </div>
-                        <div class="module-item d-flex align-items-center justify-content-between p-3 rounded-3 bg-white bg-opacity-40 border border-brand-accent" data-search="gestion usuarios roles">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="rounded-circle bg-brand-accent text-brand-secondary d-flex align-items-center justify-content-center fw-bold small" style="width: 28px; height: 28px;">✓</span>
-                                <div>
-                                    <p class="mb-0 fw-semibold text-brand-primary small">Módulo 2: Gestión de Usuarios y Roles</p>
-                                    <span class="text-muted" style="font-size: 0.75rem;">Completado el 01 Oct • 20 min</span>
-                                </div>
-                            </div>
-                            <span class="small fw-medium text-muted">100%</span>
-                        </div>
-                    </div>
-                    <p id="sin-resultados-modulo" class="small text-muted mt-3 mb-0 d-none">No hay módulos que coincidan con la búsqueda.</p>
+                <!-- LECCIONES DE LA RUTA -->
+                <div class="card-custom p-4 shadow-sm" id="tarjetaModulos">
+                    <h3 class="fs-6 fw-bold text-brand-primary mb-3">Lecciones de la ruta</h3>
+                    <label for="buscar-modulo" class="form-label small mb-1">Buscar en tus lecciones</label>
+                    <input type="search" class="form-control mb-3" id="buscar-modulo" placeholder="Escribe para filtrar..." aria-label="Buscar lecciones de la ruta">
+                    <div class="d-flex flex-column gap-2" id="lista-modulos"></div>
+                    <p id="sin-resultados-modulo" class="small text-muted mt-3 mb-0 d-none">No hay lecciones que coincidan con la búsqueda.</p>
                 </div>
-
             </div>
 
-            <!-- RIGHT COLUMN / SIDEBAR -->
+            <!-- COLUMNA LATERAL -->
             <div class="col-lg-4">
                 <div class="d-flex flex-column gap-4">
-                    <!-- User Progress Summary Widget -->
                     <div class="card-custom p-4 shadow-sm">
                         <h3 class="text-uppercase fw-bold text-brand-primary mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em;">Resumen de Actividad</h3>
                         <div class="row g-3 text-center">
                             <div class="col-6">
                                 <div class="p-3 bg-white bg-opacity-50 rounded-3 border border-brand-accent">
-                                    <span class="fs-4 fw-bold text-brand-secondary d-block">2/5</span>
+                                    <span class="fs-4 fw-bold text-brand-secondary d-block" id="resumenLecciones">0/0</span>
                                     <span class="text-muted" style="font-size: 0.75rem;">Lecciones completadas</span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="p-3 bg-white bg-opacity-50 rounded-3 border border-brand-accent">
-                                    <span class="fs-4 fw-bold text-brand-primary d-block">30 min</span>
+                                    <span class="fs-4 fw-bold text-brand-primary d-block" id="resumenTiempo">0 s</span>
                                     <span class="text-muted" style="font-size: 0.75rem;">Tiempo invertido</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-white bg-opacity-50 rounded-3 border border-brand-accent">
+                                    <span class="fs-4 fw-bold d-block" style="color: #EA580C;" id="resumenRacha">0</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;">Días de racha</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-white bg-opacity-50 rounded-3 border border-brand-accent">
+                                    <span class="fs-4 fw-bold text-brand-secondary d-block" id="resumenMeta">0/30</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;">XP de hoy</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Assistance Card -->
+                    <!-- Otras recomendaciones -->
+                    <div class="card-custom p-4 shadow-sm">
+                        <h3 class="text-uppercase fw-bold text-brand-primary mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em;">También te recomendamos</h3>
+                        <div class="d-flex flex-column gap-2 small" id="otrasRecomendaciones"></div>
+                    </div>
+
+                    <!-- Ayuda -->
                     <div class="bg-brand-primary rounded-4 p-4 text-white shadow-sm border border-brand-primary">
-                        <div class="rounded-3 bg-brand-accent bg-opacity-20 text-brand-accent d-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="rounded-3 bg-brand-accent bg-opacity-25 text-brand-accent d-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">
+                            <i class="bi bi-question-circle"></i>
                         </div>
                         <h4 class="fw-bold fs-6 mb-1">¿Tienes dudas con este tema?</h4>
                         <p class="text-white-50 small mb-3">
-                            Consulta la documentación de Shiftly o agenda una sesión de aclaración con tu tutor asignado.
+                            Consulta el glosario técnico o escríbenos y te ayudamos con tu ruta.
                         </p>
-                        <a href="#" class="small fw-semibold text-brand-accent text-decoration-none">
-                            Centro de ayuda y soporte &rarr;
-                        </a>
+                        <div class="d-flex flex-column gap-1">
+                            <a href="{{ url('/glosario') }}" class="small fw-semibold text-brand-accent text-decoration-none">Glosario técnico &rarr;</a>
+                            <a href="{{ url('/contacto') }}" class="small fw-semibold text-brand-accent text-decoration-none">Centro de ayuda y soporte &rarr;</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -355,20 +311,12 @@
         </div>
     </main>
 
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="notificacion-estado" class="toast" role="status" aria-live="polite" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Shiftly</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
-            </div>
-            <div class="toast-body" id="mensaje-notificacion">Vista actualizada.</div>
-        </div>
-    </div>
-
     <!-- Bootstrap 5.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
-    <script src="{{ asset('js/diagnostico.js') }}"></script>
+    <!-- Progreso real del usuario y recomendaciones -->
+    <script src="{{ asset('js/rutas-catalogo.js') }}"></script>
+    <script src="{{ asset('js/shiftly-progreso.js') }}"></script>
+    <script src="{{ asset('js/recomendaciones.js') }}"></script>
 </body>
 </html>

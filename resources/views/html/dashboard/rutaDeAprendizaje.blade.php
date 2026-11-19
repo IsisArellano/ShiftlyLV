@@ -76,9 +76,30 @@
 
         <!-- GRILLA DE MÓDULOS -->
         <div class="row g-4" id="contenedorTarjetas">
-            
+
+            <!-- Sistemas y TI -->
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="sistemas y ti">
+                <div class="card h-100 p-3">
+                    <div class="card-body d-flex flex-column justify-content-between p-2">
+                        <div>
+                            <div class="icon-box-modulo">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-2">Sistemas y TI</h5>
+                            <p class="card-text text-muted small">Desarrollo de software, control de versiones y despliegues.</p>
+                        </div>
+                        <a href="{{ url('/ruta-sistemas') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
+                            <i class="bi bi-check-circle me-1"></i> Completar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Medicina -->
-            <div class="col-sm-6 col-md-3 tarjeta-modulo" data-titulo="medicina">
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="medicina">
                 <div class="card h-100 p-3">
                     <div class="card-body d-flex flex-column justify-content-between p-2">
                         <div>
@@ -88,7 +109,10 @@
                             <h5 class="card-title fw-bold mb-2">Medicina</h5>
                             <p class="card-text text-muted small">Vocabulario clínico, diagnósticos y terminología médica.</p>
                         </div>
-                        <button class="btn btn-completar w-100 mt-4 py-2">
+                        <a href="{{ url('/ruta-medicina') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
                             <i class="bi bi-check-circle me-1"></i> Completar
                         </button>
                     </div>
@@ -96,7 +120,7 @@
             </div>
 
             <!-- Gastronomía -->
-            <div class="col-sm-6 col-md-3 tarjeta-modulo" data-titulo="gastronomia">
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="gastronomia">
                 <div class="card h-100 p-3">
                     <div class="card-body d-flex flex-column justify-content-between p-2">
                         <div>
@@ -106,7 +130,10 @@
                             <h5 class="card-title fw-bold mb-2">Gastronomía</h5>
                             <p class="card-text text-muted small">Técnicas culinarias, ingredientes y servicio internacional.</p>
                         </div>
-                        <button class="btn btn-completar w-100 mt-4 py-2">
+                        <a href="{{ url('/ruta-gastronomia') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
                             <i class="bi bi-check-circle me-1"></i> Completar
                         </button>
                     </div>
@@ -114,7 +141,7 @@
             </div>
 
             <!-- Derecho -->
-            <div class="col-sm-6 col-md-3 tarjeta-modulo" data-titulo="derecho">
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="derecho">
                 <div class="card h-100 p-3">
                     <div class="card-body d-flex flex-column justify-content-between p-2">
                         <div>
@@ -124,7 +151,10 @@
                             <h5 class="card-title fw-bold mb-2">Derecho</h5>
                             <p class="card-text text-muted small">Conceptos legales, contratos y jerga jurídica corporativa.</p>
                         </div>
-                        <button class="btn btn-completar w-100 mt-4 py-2">
+                        <a href="{{ url('/ruta-derecho') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
                             <i class="bi bi-check-circle me-1"></i> Completar
                         </button>
                     </div>
@@ -132,7 +162,7 @@
             </div>
 
             <!-- Arquitectura -->
-            <div class="col-sm-6 col-md-3 tarjeta-modulo" data-titulo="arquitectura">
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="arquitectura">
                 <div class="card h-100 p-3">
                     <div class="card-body d-flex flex-column justify-content-between p-2">
                         <div>
@@ -142,7 +172,31 @@
                             <h5 class="card-title fw-bold mb-2">Arquitectura</h5>
                             <p class="card-text text-muted small">Términos estructurales, planos y diseño espacial.</p>
                         </div>
-                        <button class="btn btn-completar w-100 mt-4 py-2">
+                        <a href="{{ url('/ruta-arquitectura') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
+                            <i class="bi bi-check-circle me-1"></i> Completar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- General -->
+            <div class="col-sm-6 col-lg-4 tarjeta-modulo" data-titulo="general">
+                <div class="card h-100 p-3">
+                    <div class="card-body d-flex flex-column justify-content-between p-2">
+                        <div>
+                            <div class="icon-box-modulo">
+                                <i class="bi bi-globe-americas"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-2">General</h5>
+                            <p class="card-text text-muted small">Comunicación profesional, viajes, llamadas y entrevistas.</p>
+                        </div>
+                        <a href="{{ url('/ruta-general') }}" class="btn btn-ver-arbol w-100 mt-4 py-2">
+                            <i class="bi bi-signpost-split me-1"></i> Ver árbol de lecciones
+                        </a>
+                        <button class="btn btn-completar w-100 mt-2 py-2">
                             <i class="bi bi-check-circle me-1"></i> Completar
                         </button>
                     </div>

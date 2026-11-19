@@ -1,14 +1,9 @@
 // ==========================================
 // AUDIO NATIVO (TEXT-TO-SPEECH)
 // ==========================================
+// Usa la voz femenina global (voz-femenina.js): OpenAI "nova" o la mejor voz del navegador
 function speakSentence(text, lang = 'en-US') {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
-        utterance.rate = 0.92;
-        window.speechSynthesis.speak(utterance);
-    }
+    if (window.reproducirAudioIngles) window.reproducirAudioIngles(text, { lang });
 }
 
 // ==========================================
@@ -20,6 +15,9 @@ function toggleHintBox(id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Con ?carrera=…&leccion=… la práctica la maneja ejercicios-leccion.js
+    if (window.SHIFTLY_MODO_LECCION) return;
+
     const exercises = Array.from(document.querySelectorAll('.exercise'));
     const totalExercises = exercises.length;
 

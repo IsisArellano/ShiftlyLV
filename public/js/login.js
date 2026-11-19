@@ -343,54 +343,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     inyectarInterfazCRUD();
 
-    // =========================================================
-    // 5. PROCESAMIENTO INTERACTIVO DEL LOGIN + REDIRECCIÓN
-    // =========================================================
-    const formularioLogin = document.getElementById("formularioLogin") || document.querySelector("form");
-    const btnSubmitLogin = document.getElementById("btnSubmitLogin");
-
-    function mostrarAlertaLogin(mensaje, tipo = "danger") {
-        let alerta = document.getElementById("alertaDinamicaLogin");
-        if (!alerta) {
-            alerta = document.createElement("div");
-            alerta.id = "alertaDinamicaLogin";
-            formularioLogin.insertBefore(alerta, btnSubmitLogin);
-        }
-        alerta.className = `alert alert-${tipo} rounded-4 py-2 px-3 mb-3 small fw-bold`;
-        alerta.innerHTML = `<i class="bi ${tipo === "success" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill"} me-1"></i> ${mensaje}`;
-    }
-
-    if (formularioLogin) {
-        formularioLogin.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : "";
-            const passVal = passwordInput ? passwordInput.value : "";
-            const cuentas = obtenerCuentas();
-
-            // Buscar coincidencia en el CRUD local
-            const usuarioValido = cuentas.find(c => c.email === emailVal && c.password === passVal);
-
-            if (!usuarioValido) {
-                marcarCampo(emailInput, false);
-                marcarCampo(passwordInput, false);
-                mostrarAlertaLogin("Correo o contraseña incorrectos. Puedes crear o revisar cuentas en 'Gestionar Cuentas (CRUD)'.");
-                return;
-            }
-
-            // Guardar sesión activa y animar botón antes de redirigir al index
-            localStorage.setItem(SESSION_KEY, JSON.stringify(usuarioValido));
-
-            if (btnSubmitLogin) {
-                btnSubmitLogin.disabled = true;
-                btnSubmitLogin.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Ingresando...`;
-            }
-
-            mostrarAlertaLogin(`¡Bienvenido, ${usuarioValido.nombre}! Redirigiendo...`, "success");
-
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 700);
-        });
-    }
+    
 });

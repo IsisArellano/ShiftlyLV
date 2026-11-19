@@ -1,0 +1,22 @@
+{
+    "name": "Shiftly · Inglés Profesional",
+    "short_name": "Shiftly",
+    "description": "Aprende inglés técnico para tu carrera con rutas gamificadas, ejercicios y pronunciación.",
+    "lang": "es-MX",
+    "start_url": "./dashboard",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#F6F1FA",
+    "theme_color": "#180C2E",
+    "icons": [
+        { "src": "img/pwa/icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "img/pwa/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "img/pwa/icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ],
+    "shortcuts": [
+        { "name": "Mi panel", "url": "./dashboard", "icons": [{ "src": "img/pwa/icono-192.png", "sizes": "192x192" }] },
+        { "name": "Practicar", "url": "./recomendaciones", "icons": [{ "src": "img/pwa/icono-192.png", "sizes": "192x192" }] },
+        { "name": "Glosario", "url": "./glosario", "icons": [{ "src": "img/pwa/icono-192.png", "sizes": "192x192" }] }
+    ]
+}

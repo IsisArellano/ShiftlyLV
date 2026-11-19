@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ContactoRequest;
 
 class ContactoController extends Controller
 {
     public function index()
     {
-        return view('contacto');
+        return view('html.index.contacto');
     }
 
-    public function enviar(Request $request)
+    public function enviar(ContactoRequest $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'mensaje' => 'required|string',
-        ]);
+        $datos = $request->validated();
 
-        return back()->with('success', '¡Tu mensaje ha sido enviado correctamente!');
+        return back()->with(
+            'success',
+            '¡Tu mensaje se ha recibido correctamente!'
+        );
     }
 }

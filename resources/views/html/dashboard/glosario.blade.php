@@ -16,6 +16,10 @@
     
     <!-- Estilos Propios del Glosario -->
     <link rel="stylesheet" href="{{ asset('css/glosario-style.css') }}?v=2">
+
+    <!-- App instalable (PWA) -->
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#1A0B2E">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -108,6 +112,7 @@
                 <button class="btn btn-filter" data-filter="Gastronomía" onclick="filterBySector('Gastronomía', this)">Gastronomía</button>
                 <button class="btn btn-filter" data-filter="Derecho" onclick="filterBySector('Derecho', this)">Derecho</button>
                 <button class="btn btn-filter" data-filter="Arquitectura" onclick="filterBySector('Arquitectura', this)">Arquitectura</button>
+                <button class="btn btn-filter" data-filter="General" onclick="filterBySector('General', this)">General</button>
             </div>
         </div>
 
@@ -118,16 +123,19 @@
             <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="Sistemas">
                 <div class="card glossary-card h-100">
                     <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-sistemas') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Sistemas">
                         <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop" alt="Sistemas y Software">
                         <span class="badge sector-badge"><i class="bi bi-laptop me-1 text-warning"></i> Sector TI</span>
+                        </a>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="card-title sector-title fs-4 mb-0">Sistemas</h2>
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-sistemas') }}" class="enlace-titulo-ruta">Sistemas</a></h2>
                                 <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
                             </div>
                             <p class="text-muted small mb-0">Desarrollo de software, despliegue y arquitectura web.</p>
+                            <a href="{{ url('/ruta-sistemas') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
                         </div>
 
                         <div class="vocab-accordion pt-2">
@@ -173,16 +181,19 @@
             <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="Medicina">
                 <div class="card glossary-card h-100">
                     <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-medicina') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Medicina">
                         <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600&auto=format&fit=crop" alt="Medicina">
                         <span class="badge sector-badge"><i class="bi bi-heart-pulse-fill me-1 text-danger"></i> Sector Salud</span>
+                        </a>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="card-title sector-title fs-4 mb-0">Medicina</h2>
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-medicina') }}" class="enlace-titulo-ruta">Medicina</a></h2>
                                 <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
                             </div>
                             <p class="text-muted small mb-0">Evaluación clínica, urgencias médicas y diagnóstico.</p>
+                            <a href="{{ url('/ruta-medicina') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
                         </div>
                         
                         <div class="vocab-accordion pt-2">
@@ -228,16 +239,19 @@
             <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="Gastronomía">
                 <div class="card glossary-card h-100">
                     <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-gastronomia') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Gastronomía">
                         <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600&auto=format&fit=crop" alt="Gastronomía">
                         <span class="badge sector-badge"><i class="bi bi-cup-hot-fill me-1 text-warning"></i> Alta Cocina</span>
+                        </a>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="card-title sector-title fs-4 mb-0">Gastronomía</h2>
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-gastronomia') }}" class="enlace-titulo-ruta">Gastronomía</a></h2>
                                 <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
                             </div>
                             <p class="text-muted small mb-0">Técnicas culinarias, preparación y brigada de cocina.</p>
+                            <a href="{{ url('/ruta-gastronomia') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
                         </div>
 
                         <div class="vocab-accordion pt-2">
@@ -283,16 +297,19 @@
             <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="Derecho">
                 <div class="card glossary-card h-100">
                     <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-derecho') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Derecho">
                         <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=600&auto=format&fit=crop" alt="Derecho">
                         <span class="badge sector-badge"><i class="bi bi-bank2 me-1 text-info"></i> Sector Legal</span>
+                        </a>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="card-title sector-title fs-4 mb-0">Derecho</h2>
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-derecho') }}" class="enlace-titulo-ruta">Derecho</a></h2>
                                 <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
                             </div>
                             <p class="text-muted small mb-0">Contratos internacionales, litigio y derecho corporativo.</p>
+                            <a href="{{ url('/ruta-derecho') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
                         </div>
 
                         <div class="vocab-accordion pt-2">
@@ -338,16 +355,19 @@
             <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="Arquitectura">
                 <div class="card glossary-card h-100">
                     <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-arquitectura') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Arquitectura">
                         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop" alt="Arquitectura">
                         <span class="badge sector-badge"><i class="bi bi-building me-1 text-primary"></i> Diseño & Obra</span>
+                        </a>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="card-title sector-title fs-4 mb-0">Arquitectura</h2>
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-arquitectura') }}" class="enlace-titulo-ruta">Arquitectura</a></h2>
                                 <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
                             </div>
                             <p class="text-muted small mb-0">Planos estructurales, edificación y urbanismo.</p>
+                            <a href="{{ url('/ruta-arquitectura') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
                         </div>
 
                         <div class="vocab-accordion pt-2">
@@ -389,6 +409,63 @@
                 </div>
             </div>
 
+            <!-- GENERAL -->
+            <div class="col-md-6 col-lg-4 sector-card-wrapper" data-sector="General">
+                <div class="card glossary-card h-100">
+                    <div class="card-img-wrapper">
+                        <a href="{{ url('/ruta-general') }}" class="enlace-img-ruta" aria-label="Ir a la ruta de Inglés General">
+                        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=600&auto=format&fit=crop" alt="Inglés General">
+                        <span class="badge sector-badge"><i class="bi bi-globe-americas me-1 text-info"></i> Global</span>
+                        </a>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="card-title sector-title fs-4 mb-0"><a href="{{ url('/ruta-general') }}" class="enlace-titulo-ruta">General</a></h2>
+                                <span class="term-badge-count"><i class="bi bi-bookmark-fill"></i> <span class="term-count">2</span> términos</span>
+                            </div>
+                            <p class="text-muted small mb-0">Comunicación internacional, reuniones, viajes y correos.</p>
+                            <a href="{{ url('/ruta-general') }}" class="link-ruta-carrera">Ver ruta de aprendizaje <i class="bi bi-arrow-right-short"></i></a>
+                        </div>
+
+                        <div class="vocab-accordion pt-2">
+                            <button class="btn btn-purple-accordion w-100 d-flex align-items-center justify-content-between" type="button" onclick="toggleVocab(this)">
+                                <span><i class="bi bi-card-list me-2"></i>Ver vocabulario</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </button>
+
+                            <div class="vocab-list mt-3 d-none">
+                                <ul class="list-group list-group-flush small">
+                                    <li class="list-group-item vocab-item" data-term="Deadline Fecha límite Entrega">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="term-text">Deadline</span>
+                                            <button class="btn btn-sm btn-audio" onclick="speakText('Deadline')" title="Escuchar pronunciación">
+                                                <i class="bi bi-volume-up-fill"></i>
+                                            </button>
+                                        </div>
+                                        <div class="translation-wrapper mt-2">
+                                            <button class="btn-reveal" onclick="toggleTranslation(this)"><i class="bi bi-eye-fill me-1"></i>Revelar traducción</button>
+                                            <span class="translation-text d-none">Fecha límite / Entrega</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item vocab-item" data-term="Follow up Dar seguimiento Correo">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="term-text">Follow up</span>
+                                            <button class="btn btn-sm btn-audio" onclick="speakText('Follow up')" title="Escuchar pronunciación">
+                                                <i class="bi bi-volume-up-fill"></i>
+                                            </button>
+                                        </div>
+                                        <div class="translation-wrapper mt-2">
+                                            <button class="btn-reveal" onclick="toggleTranslation(this)"><i class="bi bi-eye-fill me-1"></i>Revelar traducción</button>
+                                            <span class="translation-text d-none">Dar seguimiento</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- MENSAJE NO RESULTADOS -->
@@ -423,6 +500,10 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Voz femenina para la pronunciación (OpenAI TTS o voz del navegador) -->
+    <script src="{{ asset('js/voz-femenina.js') }}"></script>
+
     <script src="{{ asset('js/glosario-scrip.js') }}"></script>
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
 </body>
 </html>
