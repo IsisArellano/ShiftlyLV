@@ -454,3 +454,109 @@ body {
     color: var(--white);
     border-top: 3px solid var(--purple-main);
 }
+
+/* ==========================================
+   MODO LECCIÓN (ejercicios-leccion.js)
+   ========================================== */
+.feedback-banner.info {
+    background-color: var(--purple-light);
+    color: var(--purple-main);
+    border: 2px solid var(--border-purple);
+}
+
+.barra-ia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 1.25rem;
+    background-color: var(--purple-light);
+    border: 2px dashed var(--border-purple);
+}
+
+.fuente-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 50rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    background-color: var(--white);
+    color: var(--purple-main);
+    border: 1.5px solid var(--border-purple);
+}
+
+.fuente-badge.ia {
+    background-color: var(--orange-light);
+    color: var(--orange-shadow);
+    border-color: var(--orange-bright);
+}
+
+.btn-ia {
+    font-size: 0.9rem;
+}
+
+.btn-mic {
+    color: var(--purple-medium);
+}
+
+.btn-mic:hover {
+    color: var(--purple-main);
+}
+
+.btn-mic.escuchando {
+    color: var(--red-err);
+    animation: pulso-mic 1s ease-in-out infinite;
+}
+
+@keyframes pulso-mic {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.resultado-voz {
+    border-radius: 1rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.resultado-voz.info { background-color: var(--purple-light); color: var(--purple-main); }
+.resultado-voz.ok { background-color: var(--green-soft); color: var(--green-shadow); }
+.resultado-voz.medio { background-color: var(--orange-light); color: var(--orange-shadow); }
+.resultado-voz.error { background-color: var(--red-soft); color: var(--red-shadow); }
+
+#practicaLeccion .match-btn-3d {
+    width: 100%;
+}
+
+.modal-ia {
+    border: 2px solid var(--border-purple);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 0 var(--border-purple);
+    overflow: hidden;
+}
+
+.modal-ia .modal-header {
+    background: linear-gradient(135deg, #180C2E 0%, var(--purple-main) 100%);
+    color: var(--white);
+    border-bottom: none;
+}
+
+.input-api-key {
+    border: 2px solid var(--border-purple);
+    border-radius: 0.9rem 0 0 0.9rem;
+}
+
+.input-api-key:focus {
+    border-color: var(--orange-bright);
+    box-shadow: 0 0 0 0.2rem rgba(255, 106, 43, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-mic.escuchando {
+        animation: none;
+    }
+}

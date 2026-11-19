@@ -13,7 +13,7 @@ function selectArea(element, areaName) {
 function confirmAreaSelection() {
     localStorage.setItem('selectedArea', selectedAreaName);
     // Navegación hacia la carpeta /dashboard/
-    window.location.href = '../dashboard/diagnostico.html';
+    window.location.href = '/diagnostico';
 }
 
 // Función de filtrado de miembros del equipo

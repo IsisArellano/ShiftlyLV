@@ -243,6 +243,39 @@ body {
     color: var(--purple-dark);
 }
 
+/* Enlaces hacia la ruta de aprendizaje de cada carrera */
+.enlace-img-ruta {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.enlace-titulo-ruta {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.enlace-titulo-ruta:hover {
+    color: var(--orange-bright);
+}
+
+.link-ruta-carrera {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: var(--orange-bright);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.link-ruta-carrera:hover {
+    color: var(--orange-shadow);
+    transform: translateX(3px);
+}
+
 .term-badge-count {
     display: inline-flex;
     align-items: center;
