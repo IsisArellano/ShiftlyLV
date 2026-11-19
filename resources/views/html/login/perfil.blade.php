@@ -84,11 +84,11 @@
                             </div>
 
                             <h1 class="h3 fw-extrabold mb-1" id="encabezadoNombre" style="color: var(--purple-dark);">
-                                Usuario Demo
-                            </h1>
-                            <p class="text-muted mb-0 small fw-semibold" id="encabezadoSubtitulo">
-                                Sistemas y Desarrollo · Estudiante Shiftly
-                            </p>
+    {{ Auth::user()->name }} {{ Auth::user()->apellido }}
+</h1>
+<p class="text-muted mb-0 small fw-semibold" id="encabezadoSubtitulo">
+    {{ Auth::user()->area_profesional }} · Estudiante Shiftly
+</p>
                         </div>
 
                         <!-- Botón Restablecer Perfil (DELETE en localStorage) -->
@@ -171,7 +171,7 @@
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-vcard-fill icon-input"></i>
-                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth @error('apellido') is-invalid @enderror" value="{{ old('apellido', auth()->user()->apellido ?? 'Demo') }}" placeholder="Tus apellidos" required>
+                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth" value="{{ old('apellido', Auth::user()->apellido) }}" placeholder="Tus apellidos" required>
                             </div>
                             @error('apellido')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

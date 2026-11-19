@@ -2,25 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegistroRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
 
 class RegistroController extends Controller
 {
-    public function registrar(Request $request)
+    public function registrar(RegistroRequest $request)
     {
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', Password::min(8)],
-        ], [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'email.required' => 'El correo es obligatorio.',
-            'email.email' => 'Escribe un correo válido.',
-            'email.unique' => 'Este correo ya está registrado.',
-            'password.required' => 'La contraseña es obligatoria.',
-        ]);
+        $datos = $request->validated();
 
         User::create([
             'name' => $datos['nombre'],

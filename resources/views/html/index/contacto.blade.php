@@ -119,7 +119,22 @@
                         </h2>
                         
                         <div id="alert-container"></div>
+                        @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
 
+@if ($errors->any())
+    <div class="alert alert-danger" role="alert">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                         <form id="form-contacto" action="{{ route('contacto.enviar') }}" method="POST" class="d-flex flex-column gap-3">
     @csrf
     <div class="row g-3">
@@ -221,17 +236,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script de interactividad -->
-    <script>
-        document.getElementById('form-contacto').addEventListener('submit', function (event) {
-            event.preventDefault();
-            
-            const modalElement = document.getElementById('modalConfirmacion');
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-
-            this.reset();
-        });
-    </script>
+  
 </body>
 
 </html>
