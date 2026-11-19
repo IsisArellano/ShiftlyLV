@@ -922,7 +922,7 @@ function iniciarDiagnosticoCompleto() {
         } catch (_) {
 
         }
-        window.location.href = `resultado.html?aciertos=${aciertos}`;
+        window.location.href = `/resultado?aciertos=${aciertos}`;
     });
     renderizarPregunta();
 }
@@ -970,7 +970,7 @@ function iniciarRecomendaciones() {
         if (textoRazon) textoRazon.textContent = `Tu diagnóstico indica un nivel ${resultado.nivel} (${resultado.nombre}). Esta lección te ayudará a seguir avanzando desde tu nivel actual.`;
     }
     const botonComenzar = document.querySelector('#card-active-state a[href="#start-lesson"]');
-    if (botonComenzar) botonComenzar.href = 'rutaDeAprendizaje.html';
+    if (botonComenzar) botonComenzar.href = '/ruta-aprendizaje';
 
     ['active', 'completed', 'empty'].forEach((estado) => {
         const boton = document.getElementById(`btn-state-${estado}`);
@@ -991,41 +991,76 @@ function iniciarRecomendaciones() {
     });
 }
 
+
 /* resultados */
 function iniciarResultado() {
     const nivelElemento = document.getElementById('nivel-resultado');
     if (!nivelElemento) return;
 
     let resultado = null;
-    try {
-        resultado = JSON.parse(localStorage.getItem('shiftlyDiagnosticoResultado') || 'null');
-    } catch (_) {
 
+    try {
+        resultado = JSON.parse(
+            localStorage.getItem('shiftlyDiagnosticoResultado') || 'null'
+        );
+    } catch (_) {
+        resultado = null;
     }
-    const parametroAciertos = new URLSearchParams(window.location.search).get('aciertos');
-    const aciertosUrl = parametroAciertos === null ? NaN : Number(parametroAciertos);
-    if (!resultado && Number.isInteger(aciertosUrl) && aciertosUrl >= 0 && aciertosUrl <= 5) {
-        resultado = { ...nivelesDiagnostico[Math.min(aciertosUrl, nivelesDiagnostico.length - 1)], aciertos: aciertosUrl, total: 5 };
+
+    const parametroAciertos = new URLSearchParams(window.location.search)
+        .get('aciertos');
+
+    const aciertosUrl = parametroAciertos === null
+        ? NaN
+        : Number(parametroAciertos);
+
+    if (
+        !resultado &&
+        Number.isInteger(aciertosUrl) &&
+        aciertosUrl >= 0 &&
+        aciertosUrl <= 5
+    ) {
+        resultado = {
+            ...nivelesDiagnostico[
+                Math.min(aciertosUrl, nivelesDiagnostico.length - 1)
+            ],
+            aciertos: aciertosUrl,
+            total: 5,
+            revision: []
+        };
     }
-    if (resultado && nivelesDiagnostico.some((nivel) => nivel.nivel === resultado.nivel)) {
+
+    if (resultado && nivelesDiagnostico.some(
+        (nivel) => nivel.nivel === resultado.nivel
+    )) {
         nivelElemento.textContent = resultado.nivel;
         document.getElementById('nombre-nivel').textContent = resultado.nombre;
         document.getElementById('descripcion-nivel').textContent = resultado.descripcion;
         document.getElementById('texto-recomendacion').textContent = resultado.recomendacion;
     }
 
-        const listaRevision = document.getElementById('lista-revision');
+    const listaRevision = document.getElementById('lista-revision');
+
+    if (listaRevision) {
         listaRevision.innerHTML = '';
+
+        const revision = Array.isArray(resultado?.revision)
+            ? resultado.revision
+            : [];
 
         revision.forEach((item, i) => {
             const div = document.createElement('div');
             div.className = 'p-3 rounded-4';
             div.style.backgroundColor = item.correcta ? '#F0FDF4' : '#FEF2F2';
-            div.style.border = item.correcta ? '2px solid #86EFAC' : '2px solid #FECACA';
+            div.style.border = item.correcta
+                ? '2px solid #86EFAC'
+                : '2px solid #FECACA';
 
             div.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
-                    <strong class="small" style="color: var(--purple-dark);">Pregunta ${i + 1}: ${item.pregunta}</strong>
+                    <strong class="small" style="color: var(--purple-dark);">
+                        Pregunta ${i + 1}: ${item.pregunta}
+                    </strong>
                     <span class="badge rounded-pill ${item.correcta ? 'bg-success' : 'bg-danger'}">
                         ${item.correcta ? 'Correcta' : 'Incorrecta'}
                     </span>
@@ -1034,23 +1069,38 @@ function iniciarResultado() {
                     <strong>Tu respuesta:</strong> ${item.respuestaElegida}
                     ${!item.correcta ? ` · <strong class="text-success">Correcta:</strong> ${item.respuestaCorrecta}` : ''}
                 </div>
-                <div class="small text-muted"><i class="bi bi-info-circle-fill me-1"></i>${item.explicacion}</div>
+                <div class="small text-muted">
+                    <i class="bi bi-info-circle-fill me-1"></i>${item.explicacion}
+                </div>
             `;
+
             listaRevision.appendChild(div);
         });
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    document.querySelector('.resultado-botones .btn-outline-secondary').addEventListener('click', () => {
-        try {
-            localStorage.removeItem('shiftlyDiagnosticoResultado');
-        } catch (_) {
+    const botonVolver = document.querySelector(
+        '.resultado-botones .btn-outline-secondary'
+    );
 
-        }
-    });
-    const botonContinuar = document.querySelector('.resultado-botones .btn-primary');
-    botonContinuar.href = resultado && Number.isInteger(resultado.aciertos)
-        ? `recomendaciones.html?aciertos=${resultado.aciertos}`
-        : 'recomendaciones.html';
+    if (botonVolver) {
+        botonVolver.addEventListener('click', () => {
+            try {
+                localStorage.removeItem('shiftlyDiagnosticoResultado');
+            } catch (_) {
+                // No se pudo limpiar el almacenamiento.
+            }
+        });
+    }
+
+    const botonContinuar = document.querySelector(
+        '.resultado-botones .btn-primary'
+    );
+
+    if (botonContinuar) {
+        botonContinuar.href = resultado && Number.isInteger(resultado.aciertos)
+            ? `/recomendaciones?aciertos=${resultado.aciertos}`
+            : '/recomendaciones';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }

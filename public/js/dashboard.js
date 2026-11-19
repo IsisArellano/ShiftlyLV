@@ -8,11 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const displayUsername = document.getElementById('displayUsername');
     const displayEmail = document.getElementById('displayEmail');
 
-    // Toast (si existe en tu HTML) y Modal emergente
     const toastElemento = document.getElementById('toastNotificacion');
     const toastBootstrap = toastElemento && typeof bootstrap !== 'undefined' ? new bootstrap.Toast(toastElemento) : null;
 
-    // Misma clave que usa perfil.js e index.blade.php para que el perfil sea uno solo
     const STORAGE_KEY = 'shiftly_user_profile_full';
     const SESSION_KEY = 'shiftly_usuario_activo';
 
@@ -31,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (displayEmail) displayEmail.textContent = correo || 'ejemplo@correo.com';
     }
 
-    // --- 1. LEER (READ): perfil guardado, luego sesión activa, luego valores demo ---
     function cargarDatosPerfil() {
         const perfil = leerJSON(STORAGE_KEY);
         const sesion = leerJSON(SESSION_KEY);
@@ -48,19 +45,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     cargarDatosPerfil();
 
-    // --- FUNCIONES DE VALIDACIÓN ORIGINALES ---
     function validarNombre() {
         if (!inputNombre) return false;
         const valor = inputNombre.value.trim();
+
         if (valor.length >= 3) {
             inputNombre.classList.remove('is-invalid');
             inputNombre.classList.add('is-valid');
             return true;
-        } else {
-            inputNombre.classList.remove('is-valid');
-            inputNombre.classList.add('is-invalid');
-            return false;
         }
+
+        inputNombre.classList.remove('is-valid');
+        inputNombre.classList.add('is-invalid');
+        return false;
     }
 
     function validarCorreo() {
@@ -72,14 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
             inputCorreo.classList.remove('is-invalid');
             inputCorreo.classList.add('is-valid');
             return true;
-        } else {
-            inputCorreo.classList.remove('is-valid');
-            inputCorreo.classList.add('is-invalid');
-            return false;
         }
+
+        inputCorreo.classList.remove('is-valid');
+        inputCorreo.classList.add('is-invalid');
+        return false;
     }
 
-    // --- 2. CREAR / ACTUALIZAR (CREATE / UPDATE): Guardar y notificar ---
     function manejarEnvioFormulario(evento) {
         evento.preventDefault();
 
@@ -90,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const usernameVal = inputNombre.value.trim();
             const emailVal = inputCorreo.value.trim();
 
-            // Guardar en localStorage conservando los demás campos del perfil (área, nivel...)
             const partes = usernameVal.split(/\s+/);
             const perfilActualizado = {
                 ...(leerJSON(STORAGE_KEY) || {}),
@@ -102,17 +97,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(perfilActualizado));
 
-            // Actualizar vista previa dinámica
             if (displayUsername) displayUsername.textContent = usernameVal;
             if (displayEmail) displayEmail.textContent = emailVal;
 
-            // Mostrar Toast si existe
             if (toastBootstrap) {
                 toastBootstrap.show();
             }
 
-            // Desplegar Modal emergente "Los cambios se guardaron correctamente"
             const modalElement = document.getElementById('modalCambiosGuardados');
+
             if (modalElement && typeof bootstrap !== 'undefined') {
                 const modalExito = new bootstrap.Modal(modalElement);
                 modalExito.show();
@@ -120,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- 3. ELIMINAR (DELETE): Limpiar perfil ---
     if (btnEliminar) {
         btnEliminar.addEventListener('click', function () {
             if (confirm('¿Estás seguro de que deseas eliminar la información de tu perfil local?')) {
@@ -130,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputNombre.value = '';
                     inputNombre.classList.remove('is-valid', 'is-invalid');
                 }
+
                 if (inputCorreo) {
                     inputCorreo.value = '';
                     inputCorreo.classList.remove('is-valid', 'is-invalid');
@@ -141,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // EVENT LISTENERS DE VALIDACIÓN E INTERACCIÓN
     if (inputNombre) {
         inputNombre.addEventListener('input', validarNombre);
         inputNombre.addEventListener('blur', validarNombre);
