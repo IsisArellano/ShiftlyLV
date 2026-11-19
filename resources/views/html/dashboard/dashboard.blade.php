@@ -229,33 +229,43 @@
                         <i class="bi bi-person-gear" style="color: var(--purple-medium);"></i>
                         Editar Perfil de Usuario
                     </h5>
-
+@include('partials.alertas')
                     <!-- Formulario de perfil -->
                     <form id="formPerfil" novalidate>
                         @csrf
                         <div class="mb-4">
-                            <label for="username" class="form-label fw-semibold small" style="color: var(--purple-dark);">Nombre de Usuario</label>
+                            <label for="username" class="form-label fw-semibold small" style="color: var(--purple-dark);">Nombre de Usuario <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-2 border-end-0" style="border-color: var(--purple-soft); border-radius: 0.75rem 0 0 0.75rem;">
                                     <i class="bi bi-person text-muted"></i>
                                 </span>
-                                <input type="text" id="username" name="username" class="form-control form-control-custom border-start-0" placeholder="Mínimo 3 caracteres" required style="border-radius: 0 0.75rem 0.75rem 0;">
+                                <input type="text" id="username" name="username" value="{{ old('username', auth()->user()->nombre ?? '') }}" class="form-control form-control-custom border-start-0 @error('username') is-invalid @enderror" placeholder="Mínimo 3 caracteres" required style="border-radius: 0 0.75rem 0.75rem 0;">
                                 <div class="invalid-feedback">Escribe al menos 3 caracteres para tu nombre.</div>
                             </div>
+                            @error('username')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="email" class="form-label fw-semibold small" style="color: var(--purple-dark);">Correo Electrónico</label>
+                            <label for="email" class="form-label fw-semibold small" style="color: var(--purple-dark);">Correo Electrónico <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-2 border-end-0" style="border-color: var(--purple-soft); border-radius: 0.75rem 0 0 0.75rem;">
                                     <i class="bi bi-envelope text-muted"></i>
                                 </span>
-                                <input type="email" id="email" name="email" class="form-control form-control-custom border-start-0" placeholder="ejemplo@correo.com" required style="border-radius: 0 0.75rem 0.75rem 0;">
+                                <input type="email" id="email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}" class="form-control form-control-custom border-start-0 @error('email') is-invalid @enderror" placeholder="ejemplo@correo.com" required style="border-radius: 0 0.75rem 0.75rem 0;">
                                 <div class="invalid-feedback">Ingresa un correo electrónico válido.</div>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <div class="d-flex gap-2 mt-4">
+                        <div class="d-flex flex-wrap gap-2 mt-4">
+                            <a href="{{ url('/') }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold d-flex align-items-center">
+                                Cancelar / Volver
+                            </a>
+
                             <button type="submit" class="btn btn-guardar flex-grow-1">
                                 <i class="bi bi-floppy-fill me-2"></i>Guardar Cambios
                             </button>

@@ -44,6 +44,9 @@
             </div>
         </div>
     </nav>
+    <div class="container mt-3">
+    @include('partials.alertas')
+</div>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="py-5 flex-grow-1 d-flex align-items-center">
@@ -118,27 +121,39 @@
                         <div id="alert-container"></div>
 
                         <form id="form-contacto" action="{{ route('contacto.enviar') }}" method="POST" class="d-flex flex-column gap-3">
-                            @csrf
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nombre" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Tu Nombre</label>
-                                    <input type="text" id="nombre" name="nombre" class="form-control form-control-custom" placeholder="Ej. Juan Pérez" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="correo" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Correo Electrónico</label>
-                                    <input type="email" id="correo" name="correo" class="form-control form-control-custom" placeholder="ejemplo@correo.com" required>
-                                </div>
-                            </div>
+    @csrf
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="nombre" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Tu Nombre <span class="text-danger">*</span></label>
+            <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" class="form-control form-control-custom @error('nombre') is-invalid @enderror" placeholder="Ej. Juan Pérez" required>
+            @error('nombre')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="col-md-6">
+            <label for="correo" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Correo Electrónico <span class="text-danger">*</span></label>
+            <input type="email" id="correo" name="correo" value="{{ old('correo') }}" class="form-control form-control-custom @error('correo') is-invalid @enderror" placeholder="ejemplo@correo.com" required>
+            @error('correo')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 
-                            <div>
-                                <label for="mensaje" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Mensaje</label>
-                                <textarea id="mensaje" name="mensaje" class="form-control form-control-custom" rows="3" placeholder="Escribe tu mensaje o consulta..." required></textarea>
-                            </div>
+    <div>
+        <label for="mensaje" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Mensaje <span class="text-danger">*</span></label>
+        <textarea id="mensaje" name="mensaje" class="form-control form-control-custom @error('mensaje') is-invalid @enderror" rows="3" placeholder="Escribe tu mensaje o consulta aquí..." required>{{ old('mensaje') }}</textarea>
+        @error('mensaje')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
-                            <button type="submit" id="btn-enviar" class="btn btn-enviar-contacto w-100 mt-2">
-                                Enviar Mensaje <i class="bi bi-send ms-1"></i>
-                            </button>
-                        </form>
+    <div class="d-flex flex-column flex-sm-row gap-2 mt-2">
+        <a href="{{ url('/') }}" class="btn btn-outline-secondary w-100">Cancelar / Volver</a>
+        <button type="submit" id="btn-enviar" class="btn btn-enviar-contacto w-100">
+            Enviar Mensaje <i class="bi bi-send ms-1"></i>
+        </button>
+    </div>
+</form>
                     </div>
 
                 </div>

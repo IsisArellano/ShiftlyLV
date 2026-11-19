@@ -150,6 +150,7 @@
                         <div class="progress-bar-fill" id="barra-progreso" style="width: 10%;"></div>
                     </div>
                 </div>
+@include('partials.alertas')
 
                 <!-- Formulario de Pregunta -->
                 <form id="diagnostico-form" novalidate>
@@ -169,11 +170,11 @@
                         </h2>
 
                         <p class="text-muted small mb-4" id="pregunta-contexto">
-                            Selecciona la estructura gramatical correcta.
+                            Selecciona la estructura gramatical correcta. <span class="text-danger">*</span>
                         </p>
 
                         <!-- Opciones -->
-                        <div class="row g-3" id="opciones-respuesta" role="group" aria-labelledby="pregunta-texto">
+                        <div class="row g-3 @error('respuesta') is-invalid @enderror" id="opciones-respuesta" role="group" aria-labelledby="pregunta-texto">
                             <div class="col-md-6">
                                 <button type="button" class="opcion-respuesta btn w-100 text-start" data-option="0">
                                     <span class="option-key-badge">A</span>
@@ -204,13 +205,22 @@
                         <div id="mensaje-error" class="alert alert-danger rounded-4 mt-3 mb-0 py-2 px-3 small fw-bold d-none" role="alert">
                             <i class="bi bi-exclamation-circle-fill me-1"></i> Selecciona una respuesta para continuar.
                         </div>
+                        @error('respuesta')
+                            <div class="invalid-feedback d-block mt-2">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Navegación entre preguntas -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn btn-3d-ghost" id="anterior" disabled>
-                            <i class="bi bi-arrow-left me-1"></i> Anterior
-                        </button>
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex gap-2">
+                            <a href="{{ url('/dashboard') }}" class="btn btn-outline-secondary rounded-4 fw-bold d-flex align-items-center">
+                                Cancelar / Volver
+                            </a>
+
+                            <button type="button" class="btn btn-3d-ghost" id="anterior" disabled>
+                                <i class="bi bi-arrow-left me-1"></i> Anterior
+                            </button>
+                        </div>
 
                         <button type="submit" class="btn btn-3d-orange" id="siguiente">
                             Siguiente <i class="bi bi-arrow-right ms-1"></i>

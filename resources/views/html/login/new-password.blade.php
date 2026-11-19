@@ -75,29 +75,32 @@
 
             <!-- Contenedor para Mensajes Dinámicos -->
             <div id="mensajeCambio" class="alert d-none text-start mb-3 rounded-4 py-2 px-3 small fw-bold" role="alert"></div>
-
+@include('partials.alertas')
             <!-- Formulario de Cambio de Contraseña -->
             <form id="formCambiarPassword" data-redirect="{{ url('/login') }}" novalidate>
 
                 <!-- Contraseña Actual -->
                 <div class="mb-3 text-start">
-                    <label for="passActual" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                        Contraseña Actual
+                  <label for="passActual" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
+                        Contraseña Actual <span class="text-danger">*</span>
                     </label>
                     <div class="input-group-shiftly">
                         <i class="bi bi-lock-fill icon-input"></i>
-                        <input type="password" id="passActual" class="input-auth" placeholder="••••••••" autocomplete="current-password" required>
+                        <input type="password" id="passActual" class="input-auth @error('passActual') is-invalid @enderror" placeholder="••••••••" autocomplete="current-password" required>
                         <button class="btn-eye-toggle toggle-pass" type="button" data-target="passActual" aria-label="Mostrar contraseña actual">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
+                    @error('passActual')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Nueva Contraseña + Medidor -->
                 <div class="mb-3 text-start">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label for="passNueva" class="form-label small fw-extrabold mb-0" style="color: var(--purple-dark);">
-                            Nueva Contraseña
+                            Nueva Contraseña <span class="text-danger">*</span>
                         </label>
                         <span id="newPassStrengthText" class="small fw-bold text-muted" style="font-size: 0.75rem;">
                             Mínimo 6 caracteres
@@ -105,11 +108,14 @@
                     </div>
                     <div class="input-group-shiftly">
                         <i class="bi bi-key-fill icon-input"></i>
-                        <input type="password" id="passNueva" class="input-auth" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
+                        <input type="password" id="passNueva" class="input-auth @error('passNueva') is-invalid @enderror" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
                         <button class="btn-eye-toggle toggle-pass" type="button" data-target="passNueva" aria-label="Mostrar nueva contraseña">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
+                    @error('passNueva')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                     <div class="strength-meter-bar">
                         <div id="newPassStrengthBar" class="strength-meter-fill"></div>
                     </div>
@@ -119,23 +125,30 @@
                 <div class="mb-4 text-start">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label for="passConfirmar" class="form-label small fw-extrabold mb-0" style="color: var(--purple-dark);">
-                            Confirmar Nueva Contraseña
+                            Confirmar Nueva Contraseña <span class="text-danger">*</span>
                         </label>
                         <span id="matchStatusText" class="small fw-bold" style="font-size: 0.75rem;"></span>
                     </div>
                     <div class="input-group-shiftly">
                         <i class="bi bi-check2-circle icon-input"></i>
-                        <input type="password" id="passConfirmar" class="input-auth" placeholder="Repite tu nueva contraseña" autocomplete="new-password" required>
+                        <input type="password" id="passConfirmar" class="input-auth @error('passConfirmar') is-invalid @enderror" placeholder="Repite tu nueva contraseña" autocomplete="new-password" required>
                         <button class="btn-eye-toggle toggle-pass" type="button" data-target="passConfirmar" aria-label="Mostrar confirmación">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
+                    @error('passConfirmar')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" id="btnCrearPassword" class="btn btn-3d-orange w-100 py-3 fs-6">
                     <span>Crear Nueva Contraseña</span>
                     <i class="bi bi-shield-check fs-5"></i>
                 </button>
+
+                <a href="{{ url('/login') }}" class="btn btn-outline-secondary w-100 mt-2 py-2 rounded-4 fw-bold">
+                    Cancelar / Volver
+                </a>
             </form>
 
             <!-- Cancelar y regresar al Login -->

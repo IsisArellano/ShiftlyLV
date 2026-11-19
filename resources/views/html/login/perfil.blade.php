@@ -143,61 +143,73 @@
                         Edita los datos de tu cuenta
                     </span>
                 </div>
-
+@include('partials.alertas')
                 <!-- Alerta Dinámica de Estado -->
                 <div id="alertaPerfil" class="alert d-none rounded-4 py-2 px-3 small fw-bold" role="alert"></div>
 
                 <form id="formularioPerfil" method="POST" action="{{ route('perfil.actualizar') }}" novalidate>
                     @csrf
                     <div class="row g-3">
-                        <!-- Nombre -->
+                       <!-- Nombre -->
                         <div class="col-md-6 text-start">
                             <label for="nombre-perfil" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Nombre
+                                Nombre <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-fill icon-input"></i>
-                                <input type="text" id="nombre-perfil" name="nombre" class="input-auth" value="Usuario" placeholder="Tu nombre" required>
+                                <input type="text" id="nombre-perfil" name="nombre" class="input-auth @error('nombre') is-invalid @enderror" value="{{ old('nombre', auth()->user()->nombre ?? 'Usuario') }}" placeholder="Tu nombre" required>
                             </div>
+                            @error('nombre')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Apellidos -->
                         <div class="col-md-6 text-start">
                             <label for="apellido-perfil" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Apellidos
+                                Apellidos <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-vcard-fill icon-input"></i>
-                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth" value="Demo" placeholder="Tus apellidos" required>
+                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth @error('apellido') is-invalid @enderror" value="{{ old('apellido', auth()->user()->apellido ?? 'Demo') }}" placeholder="Tus apellidos" required>
                             </div>
+                            @error('apellido')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Correo Electrónico -->
                         <div class="col-md-12 text-start">
                             <label for="email-perfil" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Correo Electrónico
+                                Correo Electrónico <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-envelope-fill icon-input"></i>
-                                <input type="email" id="email-perfil" name="email" class="input-auth" value="usuario@shiftly.com" placeholder="ejemplo@correo.com" required>
+                                <input type="email" id="email-perfil" name="email" class="input-auth @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()->email ?? 'usuario@shiftly.com') }}" placeholder="ejemplo@correo.com" required>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Área Profesional Principal -->
                         <div class="col-md-6 text-start">
                             <label for="area-perfil" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Área Profesional Principal
+                                Área Profesional Principal <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-briefcase-fill icon-input"></i>
-                                <select id="area-perfil" name="area" class="select-auth">
-                                    <option value="Sistemas y Desarrollo" selected>Sistemas y Desarrollo</option>
-                                    <option value="Medicina">Medicina</option>
-                                    <option value="Gastronomía">Gastronomía</option>
-                                    <option value="Derecho">Derecho</option>
-                                    <option value="Arquitectura">Arquitectura</option>
+                                <select id="area-perfil" name="area" class="select-auth @error('area') is-invalid @enderror">
+                                    <option value="Sistemas y Desarrollo" @selected(old('area', auth()->user()->area ?? 'Sistemas y Desarrollo') === 'Sistemas y Desarrollo')>Sistemas y Desarrollo</option>
+                                    <option value="Medicina" @selected(old('area', auth()->user()->area ?? '') === 'Medicina')>Medicina</option>
+                                    <option value="Gastronomía" @selected(old('area', auth()->user()->area ?? '') === 'Gastronomía')>Gastronomía</option>
+                                    <option value="Derecho" @selected(old('area', auth()->user()->area ?? '') === 'Derecho')>Derecho</option>
+                                    <option value="Arquitectura" @selected(old('area', auth()->user()->area ?? '') === 'Arquitectura')>Arquitectura</option>
                                 </select>
                             </div>
+                            @error('area')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Nivel de Inglés Estimado -->
@@ -217,6 +229,9 @@
 
                     <!-- Botones de Acción 3D -->
                     <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4 pt-4 border-top" style="border-color: var(--border-purple) !important;">
+                        <a href="{{ url('/dashboard') }}" class="btn btn-outline-secondary rounded-4 fw-bold d-flex align-items-center justify-content-center">
+                            Cancelar / Volver
+                        </a>
                         <button type="button" id="btnCancelarPerfil" class="btn btn-3d-secondary">
                             <i class="bi bi-x-circle"></i> Descartar
                         </button>

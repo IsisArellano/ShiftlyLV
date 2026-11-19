@@ -105,10 +105,12 @@
                             <i class="bi bi-stars me-1" style="color: var(--orange-bright);"></i> NUEVO PERFIL
                         </span>
                         <h1 class="h2 fw-extrabold mb-1" style="color: var(--purple-dark);">Crear Cuenta</h1>
-                        <p class="text-muted small mb-0">
+                       <p class="text-muted small mb-0">
                             Únete a Shiftly y potencia tu inglés técnico en menos de 1 minuto.
                         </p>
                     </div>
+
+                    @include('partials.alertas')
 
                     <form id="formularioRegistro" method="POST" action="{{ route('registro.registrar') }}" novalidate>
                         @csrf
@@ -126,7 +128,7 @@
                         <!-- Nombre Completo -->
                         <div class="mb-3">
                             <label for="nombre" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Nombre Completo
+                                Nombre Completo <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-fill icon-input"></i>
@@ -135,34 +137,40 @@
                                     id="nombre"
                                     name="nombre"
                                     value="{{ old('nombre') }}"
-                                    class="input-auth"
+                                    class="input-auth @error('nombre') is-invalid @enderror"
                                     placeholder="Ej. Luis David Balandrano"
                                     autocomplete="name"
                                     required>
                             </div>
+                            @error('nombre')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Especialidad / Carrera -->
+                       <!-- Especialidad / Carrera -->
                         <div class="mb-3">
                             <label for="carrera" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Carrera o Especialidad
+                                Carrera o Especialidad <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-mortarboard-fill icon-input"></i>
-                                <select id="carrera" name="carrera" class="select-auth" required>
-                                    <option value="Sistemas y Software" selected>Sistemas y Software</option>
-                                    <option value="Medicina y Salud">Medicina y Salud</option>
-                                    <option value="Derecho Corporativo">Derecho Corporativo</option>
-                                    <option value="Gastronomía">Gastronomía</option>
-                                    <option value="Arquitectura">Arquitectura</option>
+                                <select id="carrera" name="carrera" class="select-auth @error('carrera') is-invalid @enderror" required>
+                                    <option value="Sistemas y Software" @selected(old('carrera', 'Sistemas y Software') === 'Sistemas y Software')>Sistemas y Software</option>
+                                    <option value="Medicina y Salud" @selected(old('carrera') === 'Medicina y Salud')>Medicina y Salud</option>
+                                    <option value="Derecho Corporativo" @selected(old('carrera') === 'Derecho Corporativo')>Derecho Corporativo</option>
+                                    <option value="Gastronomía" @selected(old('carrera') === 'Gastronomía')>Gastronomía</option>
+                                    <option value="Arquitectura" @selected(old('carrera') === 'Arquitectura')>Arquitectura</option>
                                 </select>
                             </div>
+                            @error('carrera')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Correo Electrónico -->
                         <div class="mb-3">
                             <label for="email" class="form-label small fw-extrabold" style="color: var(--purple-dark);">
-                                Correo Electrónico
+                                Correo Electrónico <span class="text-danger">*</span>
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-envelope-fill icon-input"></i>
@@ -171,18 +179,21 @@
                                     id="email"
                                     name="email"
                                     value="{{ old('email') }}"
-                                    class="input-auth"
+                                    class="input-auth @error('email') is-invalid @enderror"
                                     placeholder="ejemplo@correo.com"
                                     autocomplete="email"
                                     required>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <!-- Contraseña + Medidor Interactivo -->
+                      <!-- Contraseña + Medidor Interactivo -->
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label for="password" class="form-label small fw-extrabold mb-0" style="color: var(--purple-dark);">
-                                    Contraseña
+                                    Contraseña <span class="text-danger">*</span>
                                 </label>
                                 <span id="passwordStrengthText" class="small fw-bold text-muted" style="font-size: 0.76rem;">
                                     Mínimo 8 caracteres
@@ -195,7 +206,7 @@
                                     type="password"
                                     id="password"
                                     name="password"
-                                    class="input-auth"
+                                    class="input-auth @error('password') is-invalid @enderror"
                                     placeholder="Crea una contraseña segura"
                                     autocomplete="new-password"
                                     required>
@@ -209,6 +220,9 @@
                                     <i class="bi bi-eye" id="iconoPassword"></i>
                                 </button>
                             </div>
+                            @error('password')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
 
                             <!-- Barra visual de seguridad -->
                             <div class="strength-meter-bar">
@@ -221,6 +235,10 @@
                             <span>Crear Mi Cuenta</span>
                             <i class="bi bi-person-plus-fill fs-5"></i>
                         </button>
+
+                        <a href="{{ url('/') }}" class="btn btn-outline-secondary w-100 mt-2 py-2 rounded-4 fw-bold">
+                            Cancelar / Volver
+                        </a>
 
                         <!-- Contenedor dinámico para alertas de validación -->
                         <div id="mensajeRegistro" class="alert d-none mt-3 rounded-4 py-2 px-3 small fw-bold" role="status" aria-live="polite"></div>
