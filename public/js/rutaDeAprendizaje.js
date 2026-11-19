@@ -11,7 +11,7 @@ let leccionesCompletadas = 0;
 const totalLecciones = tarjetas.length;
 
 function filtrarLecciones() {
-    const textoBusqueda = buscador.value.toLowerCase().trim();
+    const textoBusqueda = buscador.value.toLocaleLowerCase('es').trim();
 
     tarjetas.forEach(function(tarjeta) {
         const titulo = tarjeta.getAttribute('data-titulo').toLowerCase();
@@ -50,5 +50,4 @@ function manejarDelegacionLecciones(evento) {
 }
 
 buscador.addEventListener('input', filtrarLecciones);
-buscador.addEventListener('keyup', filtrarLecciones);
 contenedor.addEventListener('click', manejarDelegacionLecciones);

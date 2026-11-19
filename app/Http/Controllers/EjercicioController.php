@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+ feature/crud-ejercicios-pr
 use App\Models\Ejercicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+
+use App\Http\Requests\EjercicioRequest;
+use App\Models\Ejercicio;
+ main
 
 class EjercicioController extends Controller
 {
@@ -26,9 +31,17 @@ class EjercicioController extends Controller
         ]);
     }
 
+ feature/crud-ejercicios-pr
     public function store(Request $request)
     {
         Ejercicio::create($this->datosValidados($request));
+
+    public function store(EjercicioRequest $request)
+    {
+        $datos = $this->prepararDatos($request);
+
+        Ejercicio::create($datos);
+ main
 
         return redirect()->route('gestion.ejercicios.index')
             ->with('success', 'El ejercicio se creó correctamente.');
@@ -42,9 +55,19 @@ class EjercicioController extends Controller
         ]);
     }
 
+ feature/crud-ejercicios-pr
     public function update(Request $request, Ejercicio $ejercicio)
     {
         $ejercicio->update($this->datosValidados($request));
+
+    public function update(
+        EjercicioRequest $request,
+        Ejercicio $ejercicio
+    ) {
+        $datos = $this->prepararDatos($request);
+
+        $ejercicio->update($datos);
+ main
 
         return redirect()->route('gestion.ejercicios.index')
             ->with('success', 'El ejercicio se actualizó correctamente.');
@@ -58,6 +81,7 @@ class EjercicioController extends Controller
             ->with('success', 'El ejercicio se eliminó correctamente.');
     }
 
+ feature/crud-ejercicios-pr
     private function datosValidados(Request $request): array
     {
         $datos = $request->validate([
@@ -106,6 +130,27 @@ class EjercicioController extends Controller
         $datos['opciones'] = $opciones ?: null;
         $datos['respuesta_correcta'] = $datos['respuesta_correcta'] ?? null;
         $datos['retroalimentacion'] = $datos['retroalimentacion'] ?? null;
+
+    private function prepararDatos(EjercicioRequest $request): array
+    {
+        $datos = $request->validated();
+
+        $opciones = preg_split(
+            '/\R/u',
+            $datos['opciones'] ?? ''
+        ) ?: [];
+
+        $opciones = array_values(array_filter(
+            array_map('trim', $opciones),
+            fn ($opcion) => $opcion !== ''
+        ));
+
+        $datos['opciones'] = $opciones ?: null;
+        $datos['respuesta_correcta'] =
+            $datos['respuesta_correcta'] ?? null;
+        $datos['retroalimentacion'] =
+            $datos['retroalimentacion'] ?? null;
+ main
 
         return $datos;
     }

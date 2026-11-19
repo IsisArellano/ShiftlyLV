@@ -84,11 +84,11 @@
                             </div>
 
                             <h1 class="h3 fw-extrabold mb-1" id="encabezadoNombre" style="color: var(--purple-dark);">
-                                Usuario Demo
-                            </h1>
-                            <p class="text-muted mb-0 small fw-semibold" id="encabezadoSubtitulo">
-                                Sistemas y Desarrollo · Estudiante Shiftly
-                            </p>
+    {{ Auth::user()->name }} {{ Auth::user()->apellido }}
+</h1>
+<p class="text-muted mb-0 small fw-semibold" id="encabezadoSubtitulo">
+    {{ Auth::user()->area_profesional }} · Estudiante Shiftly
+</p>
                         </div>
 
                         <!-- Botón Restablecer Perfil (DELETE en localStorage) -->
@@ -157,7 +157,7 @@
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-fill icon-input"></i>
-                                <input type="text" id="nombre-perfil" name="nombre" class="input-auth" value="Usuario" placeholder="Tu nombre" required>
+                                <input type="text" id="nombre-perfil" name="nombre" class="input-auth" value="{{ old('nombre', Auth::user()->name) }}" placeholder="Tu nombre" required>
                             </div>
                         </div>
 
@@ -168,7 +168,7 @@
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-person-vcard-fill icon-input"></i>
-                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth" value="Demo" placeholder="Tus apellidos" required>
+                                <input type="text" id="apellido-perfil" name="apellido" class="input-auth" value="{{ old('apellido', Auth::user()->apellido) }}" placeholder="Tus apellidos" required>
                             </div>
                         </div>
 
@@ -179,7 +179,7 @@
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-envelope-fill icon-input"></i>
-                                <input type="email" id="email-perfil" name="email" class="input-auth" value="usuario@shiftly.com" placeholder="ejemplo@correo.com" required>
+                                <input type="email" id="email-perfil" name="email" class="input-auth" value="{{ Auth::user()->email }}" readonly>
                             </div>
                         </div>
 
@@ -190,12 +190,12 @@
                             </label>
                             <div class="input-group-shiftly">
                                 <i class="bi bi-briefcase-fill icon-input"></i>
-                                <select id="area-perfil" name="area" class="select-auth">
-                                    <option value="Sistemas y Desarrollo" selected>Sistemas y Desarrollo</option>
-                                    <option value="Medicina">Medicina</option>
-                                    <option value="Gastronomía">Gastronomía</option>
-                                    <option value="Derecho">Derecho</option>
-                                    <option value="Arquitectura">Arquitectura</option>
+                                <select id="area-perfil" name="area_profesional" class="select-auth">
+                                    <option value="Sistemas y Desarrollo" {{ old('area_profesional', Auth::user()->area_profesional) == 'Sistemas y Desarrollo' ? 'selected' : '' }}>Sistemas y Desarrollo</option>
+                                    <option value="Medicina" {{ old('area_profesional', Auth::user()->area_profesional) == 'Medicina' ? 'selected' : '' }}>Medicina</option>
+                                    <option value="Gastronomía" {{ old('area_profesional', Auth::user()->area_profesional) == 'Gastronomía' ? 'selected' : '' }}>Gastronomía</option>
+                                    <option value="Derecho" {{ old('area_profesional', Auth::user()->area_profesional) == 'Derecho' ? 'selected' : '' }}>Derecho</option>
+                                    <option value="Arquitectura" {{ old('area_profesional', Auth::user()->area_profesional) == 'Arquitectura' ? 'selected' : '' }}>Arquitectura</option>
                                 </select>
                             </div>
                         </div>
