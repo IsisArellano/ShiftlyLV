@@ -210,3 +210,13 @@ Interfaz de Usuario y Retroalimentación (`feature/interfaz-usuario-retroaliment
 - Persistencia de datos en formularios con `old()` tras errores de validación.
 - Implementación de alertas globales (`resources/views/partials/alertas.blade.php`) para mensajes de sesión (`success` y `error`).
 - Incorporación de botones de navegación **Cancelar / Volver** y revisión responsiva en vistas móviles (`375 px`).
+
+Brian:
+Módulo de Dashboard y Diagnósticos: CRUD de Ejercicios (`feature/crud-ejercicios-pr`)
+
+- Implementación de operaciones para crear, consultar, editar y eliminar ejercicios desde formularios.
+- Incorporación del modelo `Ejercicio` y la migración para crear la tabla de ejercicios.
+- Creación de `EjercicioController` con validación de datos y acciones CRUD.
+- Añadida la vista `resources/views/html/dashboard/gestion-ejercicios.blade.php` con formulario y listado de ejercicios.
+- Registro de las rutas CRUD en `routes/web.php` bajo `/gestion/ejercicios` y enlace **Gestionar ejercicios** desde la página de práctica.
+- Corrección de la navegación del diagnóstico para usar las rutas de Laravel: `/diagnostico`, `/resultado`, `/recomendaciones` y `/ruta-aprendizaje`.
