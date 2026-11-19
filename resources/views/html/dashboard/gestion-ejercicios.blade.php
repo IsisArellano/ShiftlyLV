@@ -24,9 +24,7 @@
             <p class="text-muted mb-0">Crea, consulta, edita y elimina ejercicios guardados en la base de datos.</p>
         </div>
 
-        @if (session('success'))
-            <div class="alert alert-success" role="status">{{ session('success') }}</div>
-        @endif
+       @include('partials.alertas')
 
         <div class="row g-4 align-items-start">
             <section class="col-lg-5" aria-labelledby="form-title">
@@ -46,13 +44,13 @@
                             @endif
 
                             <div class="mb-3">
-                                <label class="form-label" for="titulo">Título</label>
+                                <label class="form-label" for="titulo">Título <span class="text-danger">*</span></label>
                                 <input class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" value="{{ old('titulo', $ejercicio?->titulo) }}" maxlength="150" required>
                                 @error('titulo')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="tipo">Tipo de ejercicio</label>
+                                <label class="form-label" for="tipo">Tipo de ejercicio <span class="text-danger">*</span></label>
                                 <select class="form-select @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
                                     <option value="completar" @selected(old('tipo', $ejercicio?->tipo ?? 'completar') === 'completar')>Completar la frase</option>
                                     <option value="opcion_multiple" @selected(old('tipo', $ejercicio?->tipo) === 'opcion_multiple')>Opción múltiple</option>
@@ -63,20 +61,20 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="pregunta">Consigna o pregunta</label>
+                                <label class="form-label" for="pregunta">Consigna o pregunta <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('pregunta') is-invalid @enderror" id="pregunta" name="pregunta" rows="3" maxlength="2000" required>{{ old('pregunta', $ejercicio?->pregunta) }}</textarea>
                                 @error('pregunta')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="opciones">Opciones o pares</label>
+                                <label class="form-label" for="opciones">Opciones o pares <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('opciones') is-invalid @enderror" id="opciones" name="opciones" rows="4" maxlength="5000" aria-describedby="ayuda-opciones">{{ $opcionesTexto }}</textarea>
                                 <div class="form-text" id="ayuda-opciones">Una opción por línea. Para emparejar, escribe inglés = español en cada línea.</div>
                                 @error('opciones')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label" for="respuesta_correcta">Respuesta correcta</label>
+                                <label class="form-label" for="respuesta_correcta">Respuesta correcta <span class="text-danger">*</span></label>
                                 <input class="form-control @error('respuesta_correcta') is-invalid @enderror" id="respuesta_correcta" name="respuesta_correcta" value="{{ old('respuesta_correcta', $ejercicio?->respuesta_correcta) }}" maxlength="1000" aria-describedby="ayuda-respuesta">
                                 <div class="form-text" id="ayuda-respuesta">Para opción múltiple debe coincidir con una opción. En emparejar se usan los pares de arriba.</div>
                                 @error('respuesta_correcta')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -90,9 +88,9 @@
 
                             <div class="d-flex gap-2">
                                 <button class="btn btn-primary" type="submit">{{ $editando ? 'Guardar cambios' : 'Crear ejercicio' }}</button>
-                                @if ($editando)
-                                    <a class="btn btn-outline-secondary" href="{{ route('gestion.ejercicios.index') }}">Cancelar</a>
-                                @endif
+                               @if ($editando)
+    <a class="btn btn-outline-secondary" href="{{ route('gestion.ejercicios.index') }}">Cancelar</a>
+@endif 
                             </div>
                         </form>
                     </div>

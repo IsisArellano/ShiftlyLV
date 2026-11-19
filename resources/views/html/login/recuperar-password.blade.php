@@ -83,6 +83,7 @@
                     @endforeach
                 </div>
             @endif
+            @include('partials.alertas')
 
             <!-- Formulario de Recuperación -->
             <form id="formRecuperar" action="{{ route('password.email') }}" method="POST" novalidate>
@@ -91,7 +92,7 @@
                 <div class="mb-4 text-start">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label for="email" class="form-label small fw-extrabold mb-0" style="color: var(--purple-dark);">
-                            Correo Electrónico
+                            Correo Electrónico <span class="text-danger">*</span>
                         </label>
                         <span id="estadoCuentaBadge" class="small fw-bold text-muted" style="font-size: 0.75rem;"></span>
                     </div>
@@ -102,18 +103,25 @@
                             type="email"
                             id="email"
                             name="email"
-                            class="input-auth"
+                            class="input-auth @error('email') is-invalid @enderror"
                             placeholder="ejemplo@correo.com"
                             value="{{ old('email') }}"
                             autocomplete="email"
                             required>
                     </div>
+                    @error('email')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" id="btnEnviarEnlace" class="btn btn-3d-orange w-100 py-3 fs-6">
                     <span>Enviar Enlace</span>
                     <i class="bi bi-send-fill"></i>
                 </button>
+
+                <a href="{{ url('/login') }}" class="btn btn-outline-secondary w-100 mt-2 py-2 rounded-4 fw-bold">
+                    Cancelar / Volver
+                </a>
             </form>
 
             <div class="mt-4 pt-3 border-top" style="border-color: var(--border-purple) !important;">
