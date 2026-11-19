@@ -7,9 +7,11 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RecuperarPasswordController;
 use App\Http\Controllers\EjercicioController;
 
-// ==========================================
-// PAGINAS PUBLICAS
-// ==========================================
+/*
+|--------------------------------------------------------------------------
+| 1. PAGINAS PUBLICAS
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('html.index.index');
@@ -20,20 +22,21 @@ Route::get('/contacto', function () {
 })->name('contacto');
 
 Route::post('/contacto', function () {
-    return redirect('/contacto')->with(
-        'exito',
-        'Mensaje enviado correctamente'
-    );
+    return redirect('/contacto')
+        ->with('exito', 'Mensaje enviado correctamente');
 })->name('contacto.enviar');
 
 Route::get('/servicios', function () {
     return view('html.index.servicios');
 })->name('servicios');
 
-// ==========================================
-// AUTENTICACION Y REGISTRO
-// ==========================================
+/*
+|--------------------------------------------------------------------------
+| 2. AUTENTICACION Y REGISTRO
+|--------------------------------------------------------------------------
+*/
 
+// Inicio de sesion
 Route::get('/login', function () {
     return view('html.login.login');
 })->name('login');
@@ -41,6 +44,7 @@ Route::get('/login', function () {
 Route::post('/login', [LoginController::class, 'iniciarSesion'])
     ->name('login.autenticar');
 
+// Registro
 Route::get('/registro', function () {
     return view('html.login.registro');
 })->name('registro');
@@ -49,7 +53,6 @@ Route::post('/registro', [RegistroController::class, 'registrar'])
     ->name('registro.registrar');
 
 // Recuperacion de contraseña
-
 Route::get('/recuperar-password', function () {
     return view('html.login.recuperar-password');
 })->name('recuperar-password');
@@ -59,35 +62,35 @@ Route::post('/recuperar-password', [
     'enviarEnlace'
 ])->name('password.email');
 
+// Restablecimiento de contraseña
 Route::get('/new-password/{token}', [
     RecuperarPasswordController::class,
     'mostrarFormularioRestablecimiento'
 ])->name('password.reset');
+
+Route::get('/new-password', function () {
+    return redirect('/recuperar-password');
+});
 
 Route::post('/new-password', [
     RecuperarPasswordController::class,
     'restablecerPassword'
 ])->name('password.update');
 
-Route::get('/new-password', function () {
-    return redirect('/recuperar-password');
-});
-
 // Verificacion de correo
-
 Route::get('/verificacion-correo', function () {
     return view('html.login.verificacion-correo');
 })->name('verificacion-correo');
 
-// ==========================================
-// PAGINAS PRIVADAS
-// SOLAMENTE USUARIOS AUTENTICADOS
-// ==========================================
+/*
+|--------------------------------------------------------------------------
+| 3. PAGINAS PRIVADAS
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
 
-    // Perfil
-
+    // Perfil de usuario
     Route::get('/perfil', function () {
         return view('html.login.perfil');
     })->name('perfil');
@@ -96,18 +99,15 @@ Route::middleware('auth')->group(function () {
         ->name('perfil.actualizar');
 
     // Cerrar sesion
-
     Route::post('/logout', [LoginController::class, 'cerrarSesion'])
         ->name('logout');
 
     // Dashboard
-
     Route::get('/dashboard', function () {
         return view('html.dashboard.dashboard');
     })->name('dashboard');
 
     // Modulos de aprendizaje
-
     Route::get('/ruta-aprendizaje', function () {
         return view('html.dashboard.rutaDeAprendizaje');
     })->name('ruta-aprendizaje');
@@ -137,7 +137,6 @@ Route::middleware('auth')->group(function () {
     })->name('resultados-leccion');
 
     // Rutas por area profesional
-
     Route::get('/ruta-sistemas', function () {
         return view('html.dashboard.ruta-sistemas');
     })->name('ruta-sistemas');
@@ -163,7 +162,6 @@ Route::middleware('auth')->group(function () {
     })->name('ruta-general');
 
     // Administracion de ejercicios (CRUD)
-
     Route::resource('gestion/ejercicios', EjercicioController::class)
         ->except('show')
         ->parameters(['gestion/ejercicios' => 'ejercicio'])
