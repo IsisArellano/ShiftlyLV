@@ -116,7 +116,22 @@
                         </h2>
                         
                         <div id="alert-container"></div>
+                        @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
 
+@if ($errors->any())
+    <div class="alert alert-danger" role="alert">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                         <form id="form-contacto" action="{{ route('contacto.enviar') }}" method="POST" class="d-flex flex-column gap-3">
                             @csrf
                             <div class="row g-3">
@@ -126,7 +141,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="correo" class="form-label fw-semibold small mb-1" style="color: var(--purple-dark);">Correo Electrónico</label>
-                                    <input type="email" id="correo" name="correo" class="form-control form-control-custom" placeholder="ejemplo@correo.com" required>
+                                    <input type="email" id="correo" name="email" class="form-control form-control-custom" placeholder="ejemplo@correo.com" value="{{ old('email') }}" required>
                                 </div>
                             </div>
 
@@ -206,17 +221,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script de interactividad -->
-    <script>
-        document.getElementById('form-contacto').addEventListener('submit', function (event) {
-            event.preventDefault();
-            
-            const modalElement = document.getElementById('modalConfirmacion');
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-
-            this.reset();
-        });
-    </script>
+  
 </body>
 
 </html>

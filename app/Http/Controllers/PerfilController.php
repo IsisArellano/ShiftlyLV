@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PerfilRequest;
 use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
 {
-    public function actualizar(Request $request)
+    public function actualizar(PerfilRequest $request)
     {
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'min:2', 'max:255'],
-            'apellido' => ['required', 'string', 'max:255'],
-            'area_profesional' => [
-                'required',
-                'in:Sistemas y Desarrollo,Medicina,Gastronomía,Derecho,Arquitectura'
-            ],
-        ]);
+        $datos = $request->validated();
 
         $usuario = Auth::user();
 

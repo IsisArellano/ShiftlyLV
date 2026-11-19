@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RecuperarPasswordController;
 use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\ContactoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +18,11 @@ Route::get('/', function () {
     return view('html.index.index');
 })->name('index');
 
-Route::get('/contacto', function () {
-    return view('html.index.contacto');
-})->name('contacto');
+Route::get('/contacto', [ContactoController::class, 'index'])
+    ->name('contacto');
 
-Route::post('/contacto', function () {
-    return redirect('/contacto')
-        ->with('exito', 'Mensaje enviado correctamente');
-})->name('contacto.enviar');
+Route::post('/contacto', [ContactoController::class, 'enviar'])
+    ->name('contacto.enviar');
 
 Route::get('/servicios', function () {
     return view('html.index.servicios');
