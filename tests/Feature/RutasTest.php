@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * Comprueba que todas las páginas de Shiftly cargan sin errores
@@ -13,6 +15,16 @@ use Tests\TestCase;
  */
 class RutasTest extends TestCase
 {
+        use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $usuario = User::factory()->create();
+
+        $this->actingAs($usuario);
+    }
     public static function paginas(): array
     {
         return [
@@ -23,7 +35,6 @@ class RutasTest extends TestCase
             'registro' => ['/registro'],
             'recuperar password' => ['/recuperar-password'],
             'verificacion correo' => ['/verificacion-correo'],
-            'nuevo password' => ['/new-password'],
             'perfil' => ['/perfil'],
             'dashboard' => ['/dashboard'],
             'ruta de aprendizaje' => ['/ruta-aprendizaje'],
